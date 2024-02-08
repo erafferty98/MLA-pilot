@@ -1,8 +1,7 @@
 "use client";
-
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { trackExercise } from "../api";
+import { trackExercise } from "../../api";
 import "bootstrap/dist/css/bootstrap.min.css";
 import IconButton from "@mui/material/IconButton";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
@@ -12,10 +11,8 @@ import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import OtherIcon from "@mui/icons-material/HelpOutlineSharp";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Context } from "../context/contextProvider";
 
-const TrackExercise = () => {
-  const currentUser = useContext(Context);
+const TrackExercise = ({ currentUser }) => {
   const [state, setState] = useState({
     exerciseType: "",
     description: "",

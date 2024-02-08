@@ -1,14 +1,11 @@
 "use client";
-
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 import moment from "moment";
-import { Context } from "../context/contextProvider";
 import "./journal.css";
 
 const Journal = ({ currentUser }) => {
-  const currentUser = useContext(Context);
   const [startDate, setStartDate] = useState(moment().startOf("week").toDate());
   const [endDate, setEndDate] = useState(moment().endOf("week").toDate());
   const [exercises, setExercises] = useState([]);

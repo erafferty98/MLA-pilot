@@ -1,12 +1,10 @@
 "use client";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./statistics.css";
-import { Context } from "../context/contextProvider";
 
-const Statistics = () => {
+const Statistics = ({ currentUser }) => {
   const [data, setData] = useState([]);
-  const currentUser = useContext(Context);
 
   useEffect(() => {
     const url = `http://localhost:5050/stats/${currentUser}`;

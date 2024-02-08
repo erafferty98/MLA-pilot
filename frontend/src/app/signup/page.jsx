@@ -1,27 +1,16 @@
 "use client";
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Button, Form, Alert } from "react-bootstrap";
 import axios from "axios";
 import Link from "next/link";
-import { Context } from "../../context/contextProvider";
 
 const Signup = ({ onSignup }) => {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
-  const { setIsLoggedIn, setCurrentUser } = useContext(Context);
-  const onSignup = (username) => {
-    setIsLoggedIn(true);
-    setCurrentUser(username);
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
-
-  const onSignup = (username) => {
-    setIsLoggedIn(true);
-    setCurrentUser(username);
   };
 
   const handleSignup = async (e) => {
