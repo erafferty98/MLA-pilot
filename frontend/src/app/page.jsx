@@ -1,21 +1,21 @@
-"use client";
+'use client'
 
-import { useEffect, useContext } from "react";
-import { Context } from "../context/contextProvider";
-import { useRouter } from "next/navigation";
-import logo from "../img/CFG_logo.png";
+import { useEffect, useContext } from 'react'
+import { AuthContext } from '../context/AuthContextProvider'
+import { useRouter } from 'next/navigation'
+import logo from '../img/CFG_logo.png'
 
 const HomePage = () => {
-  const router = useRouter();
-  const { isLoggedIn } = useContext(Context);
+  const router = useRouter()
+  const { isLoggedIn } = useContext(AuthContext)
   useEffect(() => {
     if (!isLoggedIn) {
-      router.push("/login");
+      router.push('/login')
     } else {
-      router.push("/statistics");
+      router.push('/statistics')
     }
   }),
-    [isLoggedIn];
-  return <p></p>;
-};
-export default HomePage;
+    [isLoggedIn]
+  return <p></p>
+}
+export default HomePage

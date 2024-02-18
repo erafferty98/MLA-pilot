@@ -6,12 +6,17 @@
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@mantine/core": "^7.5.3",
+    "@mantine/hooks": "^7.5.3",
     "@mui/icons-material": "^5.15.7",
     "@mui/material": "^5.15.7",
     "@mui/material-nextjs": "^5.15.7",
+    "@tabler/icons-react": "^2.47.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
+    "@types/react": "^18.2.56",
+    "@types/react-dom": "^18.2.19",
     "axios": "^1.5.1",
     "bootstrap": "^5.3.2",
     "moment": "^2.29.4",
@@ -20,10 +25,11 @@
     "react-bootstrap": "^2.9.0",
     "react-datepicker": "^4.20.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.50.1",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "next dev",
+    "dev": "next dev",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -38,6 +44,9 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "postcss": "^8.4.35",
+    "postcss-preset-mantine": "^1.13.0",
+    "postcss-simple-vars": "^7.0.1",
     "typescript": "5.3.3"
   }
 }

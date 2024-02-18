@@ -1,9 +1,10 @@
-"use client";
-import Footer from "../components/footer";
+'use client'
+import Footer from '../components/footer'
 //import config from "@/lib/config";
-import "./globals.css";
-import { Providers } from "../components/providers";
-import logo from "../img/CFG_logo.png";
+import { Providers } from '../components/providers'
+import logo from '../img/CFG_logo.png'
+import { ColorSchemeScript } from '@mantine/core'
+import '@mantine/core/styles.css'
 
 /**
  * Default metadata.
@@ -23,17 +24,19 @@ import logo from "../img/CFG_logo.png";
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head />
+      <head>
+        <ColorSchemeScript />
+      </head>
       <body>
         <Providers>
-          <div className="appTitle">
+          {/* <div className="appTitle">
             <h1>MLA Fitness App</h1>
             <img src={logo} alt="CFG Fitness App Logo" id="appLogo" />
-          </div>
+          </div> */}
           <main>{children}</main>
-          <Footer />
+          {/* <Footer /> */}
         </Providers>
       </body>
     </html>
-  );
+  )
 }
