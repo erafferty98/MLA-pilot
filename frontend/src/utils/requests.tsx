@@ -1,7 +1,8 @@
+'use client'
+
 import axios from 'axios'
 
 export const loginRequest = async (data) => {
-  'use server'
   try {
     const response = await axios.post('http://localhost:8080/api/auth/login', {
       username: data.username,
@@ -23,7 +24,6 @@ export const loginRequest = async (data) => {
 }
 
 export const signupRequest = async (data) => {
-  'use server'
   try {
     const response = await axios.post('http://localhost:8080/api/auth/signup', {
       username: data.username,

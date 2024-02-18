@@ -1,8 +1,7 @@
 'use client'
-import Footer from '../components/footer'
+import { ReactNode } from 'react'
 //import config from "@/lib/config";
-import { Providers } from '../components/providers'
-import logo from '../img/CFG_logo.png'
+import Providers from '../components/Providers'
 import { ColorSchemeScript } from '@mantine/core'
 import '@mantine/core/styles.css'
 
@@ -21,7 +20,7 @@ import '@mantine/core/styles.css'
  *
  * @see https://nextjs.org/docs/app/api-reference/file-conventions/layout
  */
-export default function RootLayout({ children }) {
+const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <html lang="en">
       <head>
@@ -29,14 +28,11 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <Providers>
-          {/* <div className="appTitle">
-            <h1>MLA Fitness App</h1>
-            <img src={logo} alt="CFG Fitness App Logo" id="appLogo" />
-          </div> */}
           <main>{children}</main>
-          {/* <Footer /> */}
         </Providers>
       </body>
     </html>
   )
 }
+
+export default RootLayout

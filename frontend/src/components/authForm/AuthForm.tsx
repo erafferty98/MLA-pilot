@@ -1,13 +1,14 @@
 'use client'
 import { TextInput, PasswordInput, Button, Alert, rem } from '@mantine/core'
 import { IconLock, IconUser, IconAlertCircle } from '@tabler/icons-react'
-import classes from './AuthForm.module.css'
-import { useContext } from 'react'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { useContext, useState } from 'react'
 import { useRouter } from 'next/navigation'
+
 import { AuthContext } from '../../context/AuthContextProvider'
 import { ErrorContext } from '../../context/ErrorContextProvider'
-
-import { useForm, SubmitHandler } from 'react-hook-form'
+import classes from './AuthForm.module.css'
+import Spinner from '../Spinner'
 
 const lockIcon = (
   <IconLock style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
@@ -33,6 +34,7 @@ const AuthForm = ({
   submitAction: Function
   dataQaIdPrefix: string
 }) => {
+  const [submitting, setSubmitting] = useState(false)
   const { setIsLoggedIn, setCurrentUser } = useContext(AuthContext)
   const { error, errorMessage, setError, clearError } = useContext(ErrorContext)
   const router = useRouter()
@@ -43,12 +45,15 @@ const AuthForm = ({
   } = useForm<IFormInput>()
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     clearError()
+    setSubmitting(true)
     const response = await submitAction(data)
     if (response.success === true) {
       setCurrentUser(data.username)
       setIsLoggedIn(true)
+      setSubmitting(false)
       router.push('/')
     } else {
+      setSubmitting(false)
       setError(response.error)
     }
   }
@@ -80,7 +85,7 @@ const AuthForm = ({
         ></Alert>
       )}
       <Button size="md" fullWidth className={classes.loginButton} type="submit">
-        {buttonText}
+        {submitting ? <Spinner /> : buttonText}
       </Button>
     </form>
   )
