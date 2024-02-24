@@ -43,3 +43,23 @@ export const signupRequest = async (data) => {
     }
   }
 }
+
+export const addExercise = async (data) => {
+  try {
+    const response = await axios.post('http://localhost:5300/exercises/add', {
+      ...data,
+    })
+
+    if (response.status === 200) {
+      return { success: true }
+    } else {
+      throw new Error('There was an error adding your exercise')
+    }
+  } catch (err) {
+    console.log(err)
+    return {
+      success: false,
+      error: "There was an error adding your exercise' Please try again.",
+    }
+  }
+}

@@ -1,9 +1,9 @@
-'use client'
 import { ReactNode } from 'react'
 //import config from "@/lib/config";
 import Providers from '../components/Providers'
 import { ColorSchemeScript } from '@mantine/core'
 import '@mantine/core/styles.css'
+import '@mantine/dates/styles.css'
 
 /**
  * Default metadata.
