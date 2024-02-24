@@ -7,7 +7,7 @@ import { IconAlertCircle } from '@tabler/icons-react'
 
 import Spinner from '../Spinner'
 import { AuthContext } from '../../context/AuthContextProvider'
-import { data } from '../../utils/exercises'
+import { exercises } from '../../utils/exercises'
 import { addExercise } from '../../utils/requests'
 import classes from './AddExerciseModal.module.css'
 import ExercisePicker from '../ExercisePicker/ExercisePicker'
@@ -37,7 +37,7 @@ const AddExerciseModal = ({ close }) => {
   const { register, handleSubmit, control, setValue } = useForm<IFormInput>({
     defaultValues: {
       exerciseDate: new Date(new Date().setHours(0, 0, 0, 0)),
-      exerciseType: data[0].label,
+      exerciseType: exercises[0].label,
       exerciseDescription: '',
     },
   })

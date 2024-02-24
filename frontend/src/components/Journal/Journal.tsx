@@ -6,9 +6,14 @@ import {
   Center,
   Group,
   ActionIcon,
+  Alert,
 } from '@mantine/core'
 import { useState, useEffect, useContext } from 'react'
-import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react'
+import {
+  IconArrowLeft,
+  IconArrowRight,
+  IconInfoCircle,
+} from '@tabler/icons-react'
 
 import { AuthContext } from '../../context/AuthContextProvider'
 import DateSelect from '../DateSelect'
@@ -18,7 +23,7 @@ import JournalEntry from './JournalEntry'
 import Spinner from '../Spinner'
 import moment from 'moment'
 
-const Journal = () => {
+const Journal = ({ height }) => {
   const defaultDateValue = new Date()
   defaultDateValue.setDate(defaultDateValue.getDate() - 7)
   const [value, setValue] = useState<[Date | null, Date | null]>([
@@ -26,7 +31,8 @@ const Journal = () => {
     new Date(),
   ])
   const [data, setData] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
   const { currentUser } = useContext(AuthContext)
   const incrementDate = () => {
     const newStartDate = moment(value[0]).add(7, 'days').toDate()
@@ -35,7 +41,7 @@ const Journal = () => {
   }
   const decrementDate = () => {
     const newStartDate = moment(value[0]).subtract(7, 'days').toDate()
-    const newEndDate = moment(newStartDate).subtract(7, 'days').toDate()
+    const newEndDate = moment(newStartDate).add(7, 'days').toDate()
     setValue([newStartDate, newEndDate])
   }
 
@@ -45,14 +51,20 @@ const Journal = () => {
 
   useEffect(() => {
     setLoading(true)
+    setError(false)
     fetchExercises(value[0], value[1], currentUser).then((data) => {
-      setData(data)
+      if (data === undefined) {
+        setData([])
+        setError(true)
+      } else {
+        setData(data)
+      }
       setLoading(false)
     })
   }, [value, currentUser])
 
   return (
-    <Box className={classes.container}>
+    <Box className={classes.container} h={height}>
       <Grid justify="center">
         <Grid.Col span={{ base: 0, sm: 1, md: 4 }}></Grid.Col>
         <Grid.Col span={{ base: 5, sm: 5, md: 4 }} h={'8rem'}>
@@ -74,6 +86,22 @@ const Journal = () => {
 
       <Flex direction="column" align="center">
         {loading ? <Spinner /> : JournalEntries}
+        {error && (
+          <Alert
+            variant="light"
+            color="white"
+            title="An error occurred"
+            icon={<IconInfoCircle />}
+            classNames={{
+              root: classes.alertRoot,
+              message: classes.alertMessage,
+            }}
+            w={'80%'}
+          >
+            Looks like there was an error fetching your data. Please try
+            refreshing the page.
+          </Alert>
+        )}
       </Flex>
       <Group className={classes.navArrowsGroup}>
         <ActionIcon variant="transparent" size={36} onClick={decrementDate}>

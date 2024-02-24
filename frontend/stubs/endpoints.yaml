@@ -41,3 +41,11 @@
     - status: 200
       latency: 1000
       file: './responses/weekly.json'
+
+- request:
+    url: ^/stats/
+    method: GET
+  response:
+    - status: 200
+      latency: 1000
+      file: './responses/statistics.json'

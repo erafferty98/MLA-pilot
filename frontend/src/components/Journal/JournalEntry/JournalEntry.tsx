@@ -1,14 +1,15 @@
 import { Box, Flex, Grid, Text } from '@mantine/core'
 import classes from './JournalEntry.module.css'
-import { data } from '../../../utils/exercises'
+import { exercises } from '../../../utils/exercises'
 
 const JournalEntry = ({ entry }: { entry: JournalEntryType }) => {
+  const exercise = exercises.find((item) => item.label === entry.exerciseType)
   return (
     <Box className={classes.container}>
       <Grid>
         <Grid.Col span={4}>
           <Flex align="center" justify="center" h={'100%'}>
-            {data.find((item) => item.label === entry.exerciseType).icon}
+            <exercise.icon />
           </Flex>
         </Grid.Col>
         <Grid.Col span={4}>
