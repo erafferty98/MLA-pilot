@@ -9,10 +9,7 @@ import classes from './Header.module.css'
 import Image from 'next/image'
 import { Modal, Button } from '@mantine/core'
 import { AuthContext } from '../../context/AuthContextProvider'
-import { Add } from '@mui/icons-material'
-import AddExerciseModal, {
-  AddExercieModalTitle,
-} from '../AddExerciseModal/AddExerciseModal'
+import AddExerciseModal, { AddExercieModalTitle } from '../AddExerciseModal'
 
 const Header = () => {
   const router = useRouter()

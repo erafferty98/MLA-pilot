@@ -17,6 +17,11 @@
 .horizontalDivider {
   width: 90%;
   background-color: white;
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid white;
+  margin: 0;
 }
 .headerButton {
   background-color: transparent;

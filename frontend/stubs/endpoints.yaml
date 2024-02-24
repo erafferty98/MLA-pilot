@@ -33,3 +33,11 @@
     - status: 200
       latency: 1000
       body: 'User registered successfully!'
+
+- request:
+    url: ^/stats/weekly
+    method: GET
+  response:
+    - status: 200
+      latency: 1000
+      file: './responses/weekly.json'
