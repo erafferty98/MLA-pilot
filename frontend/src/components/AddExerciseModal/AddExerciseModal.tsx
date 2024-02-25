@@ -20,13 +20,6 @@ import { addExercise } from '../../utils/requests'
 import classes from './AddExerciseModal.module.css'
 import ExercisePicker from '../ExercisePicker/ExercisePicker'
 
-interface IFormInput {
-  exerciseDate: Date
-  exerciseType: string
-  exerciseDescription: string
-  exerciseDuration: number | string
-}
-
 const errorIcon = (
   <IconAlertCircle style={{ width: rem(18), height: rem(18) }} stroke={2} />
 )
@@ -49,7 +42,7 @@ const AddExerciseModal = ({ close }) => {
     control,
     setValue,
     formState: { errors },
-  } = useForm<IFormInput>({
+  } = useForm<ExerciseFormInputType>({
     defaultValues: {
       exerciseDate: new Date(new Date().setHours(0, 0, 0, 0)),
       exerciseType: exercises[0].label,
@@ -57,7 +50,7 @@ const AddExerciseModal = ({ close }) => {
     },
   })
 
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+  const onSubmit: SubmitHandler<ExerciseFormInputType> = async (data) => {
     setError(false)
     setSubmitting(true)
     const response = await addExercise({ ...data, username: currentUser })

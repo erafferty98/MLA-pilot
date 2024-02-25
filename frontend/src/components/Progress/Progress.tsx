@@ -38,9 +38,11 @@ const Progress = ({ height }) => {
     setLoading(true)
     setError(false)
     fetchStatistics(currentUser).then((data) => {
-      if (data === undefined || data.length === 0) {
+      if (data === undefined) {
         setData([])
         setError(true)
+      } else if (data.length === 0) {
+        setData([])
       } else {
         console.log(data, currentUser)
         setData(data[0].exercises)

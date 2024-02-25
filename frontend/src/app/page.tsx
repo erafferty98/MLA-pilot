@@ -12,9 +12,9 @@ const HomePage = () => {
   const router = useRouter()
   const { isLoggedIn } = useContext(AuthContext)
   useEffect(() => {
-    // if (!isLoggedIn) {
-    //   router.push('/login')
-    // }
+    if (!isLoggedIn) {
+      router.push('/login')
+    }
   }),
     [isLoggedIn]
   return (
