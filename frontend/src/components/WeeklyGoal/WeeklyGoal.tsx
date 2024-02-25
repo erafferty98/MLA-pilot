@@ -18,6 +18,7 @@ import { IconInfoCircle, IconEdit, IconCheck } from '@tabler/icons-react'
 import moment from 'moment'
 
 import { AuthContext } from '../../context/AuthContextProvider'
+import { UpdateContext } from '../../context/UpdateContextProvider'
 import classes from './WeeklyGoal.module.css'
 import { fetchExercises } from '../../utils/requests'
 import Spinner from '../Spinner'
@@ -34,6 +35,7 @@ const WeeklyGoal = ({ height }) => {
   const [error, setError] = useState(false)
   const [weeklyGoal, setWeeklyGoal] = useState<string | number>(200)
   const { currentUser } = useContext(AuthContext)
+  const { update } = useContext(UpdateContext)
   const [opened, { open, close }] = useDisclosure(false)
 
   useEffect(() => {
@@ -41,18 +43,20 @@ const WeeklyGoal = ({ height }) => {
   }, [data, weeklyGoal])
 
   useEffect(() => {
-    setLoading(true)
-    setError(false)
-    fetchExercises(value[0], value[1], currentUser).then((data) => {
-      if (data === undefined) {
-        setData([])
-        setError(true)
-      } else {
-        setData(data)
-      }
-      setLoading(false)
-    })
-  }, [value, currentUser])
+    if (currentUser) {
+      setLoading(true)
+      setError(false)
+      fetchExercises(value[0], value[1], currentUser).then((data) => {
+        if (data === undefined) {
+          setData([])
+          setError(true)
+        } else {
+          setData(data)
+        }
+        setLoading(false)
+      })
+    }
+  }, [value, currentUser, update])
 
   const Labels =
     formattedData.length != 0 ? (
@@ -101,15 +105,15 @@ const WeeklyGoal = ({ height }) => {
 
       <Box className={classes.container} h={height}>
         <Grid justify="center">
-          <Grid.Col span={{ base: 0, sm: 1, md: 1 }}></Grid.Col>
-          <Grid.Col span={{ base: 5, sm: 5, md: 6 }} h={'5rem'}>
+          <Grid.Col span={{ base: 1, sm: 2, md: 2 }}></Grid.Col>
+          <Grid.Col span={{ base: 5, sm: 8, md: 8 }} h={'5rem'}>
             <Flex align={'center'} h={'100%'} w={'100%'} justify={'center'}>
               <Title order={2} className={classes.title}>
                 Weekly Goal
               </Title>
             </Flex>
           </Grid.Col>
-          <Grid.Col span={{ base: 3, sm: 2, md: 4 }}>
+          <Grid.Col span={{ base: 1, sm: 2, md: 2 }}>
             <Flex align={'center'} h={'100%'} w={'100%'} justify={'center'}>
               <ActionIcon variant="transparent" size={36} onClick={open}>
                 <IconEdit size={24} color="white" />
@@ -140,7 +144,13 @@ const WeeklyGoal = ({ height }) => {
                     label={
                       <Center>
                         <IconCheck
-                          style={{ width: rem(22), height: rem(22) }}
+                          size={24}
+                          color="white"
+                          style={{
+                            width: rem(22),
+                            height: rem(22),
+                            strokeWidth: 4,
+                          }}
                         />
                       </Center>
                     }

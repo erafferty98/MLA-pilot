@@ -35,6 +35,14 @@
       body: 'User registered successfully!'
 
 - request:
+    url: ^/exercises/add$
+    method: POST
+  response:
+    - status: 200
+      latency: 1000
+      body: 'User registered successfully!'
+
+- request:
     url: ^/stats/weekly
     method: GET
   response:

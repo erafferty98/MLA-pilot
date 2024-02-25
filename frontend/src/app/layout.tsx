@@ -25,6 +25,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
     <html lang="en">
       <head>
         <ColorSchemeScript />
+        <title>CFG Fitness Tracker</title>
       </head>
       <body>
         <Providers>

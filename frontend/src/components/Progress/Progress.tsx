@@ -3,6 +3,7 @@ import { useState, useEffect, useContext } from 'react'
 import { IconInfoCircle } from '@tabler/icons-react'
 
 import { AuthContext } from '../../context/AuthContextProvider'
+import { UpdateContext } from '../../context/UpdateContextProvider'
 import classes from './Progress.module.css'
 import { fetchStatistics } from '../../utils/requests'
 import Spinner from '../Spinner'
@@ -14,6 +15,7 @@ const Progress = ({ height }) => {
   const [error, setError] = useState(false)
   const [maxDuration, setMaxDuration] = useState(0)
   const { currentUser } = useContext(AuthContext)
+  const { update } = useContext(UpdateContext)
 
   const ProgressBars =
     data.length != 0 ? (
@@ -35,21 +37,22 @@ const Progress = ({ height }) => {
     [data]
 
   useEffect(() => {
-    setLoading(true)
-    setError(false)
-    fetchStatistics(currentUser).then((data) => {
-      if (data === undefined) {
-        setData([])
-        setError(true)
-      } else if (data.length === 0) {
-        setData([])
-      } else {
-        console.log(data, currentUser)
-        setData(data[0].exercises)
-      }
-      setLoading(false)
-    })
-  }, [currentUser])
+    if (currentUser) {
+      setLoading(true)
+      setError(false)
+      fetchStatistics(currentUser).then((data) => {
+        if (data === undefined) {
+          setData([])
+          setError(true)
+        } else if (data.length === 0) {
+          setData([])
+        } else {
+          setData(data[0].exercises)
+        }
+        setLoading(false)
+      })
+    }
+  }, [currentUser, update])
 
   return (
     <Box className={classes.container} h={height}>

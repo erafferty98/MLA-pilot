@@ -16,6 +16,7 @@ import {
 } from '@tabler/icons-react'
 
 import { AuthContext } from '../../context/AuthContextProvider'
+import { UpdateContext } from '../../context/UpdateContextProvider'
 import DateSelect from '../DateSelect'
 import classes from './Journal.module.css'
 import { fetchExercises } from '../../utils/requests'
@@ -34,6 +35,7 @@ const Journal = ({ height }) => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const { currentUser } = useContext(AuthContext)
+  const { update } = useContext(UpdateContext)
   const incrementDate = () => {
     const newStartDate = moment(value[0]).add(7, 'days').toDate()
     const newEndDate = moment(newStartDate).add(7, 'days').toDate()
@@ -55,7 +57,7 @@ const Journal = ({ height }) => {
     )
 
   useEffect(() => {
-    if (value[1] != null) {
+    if (value[1] != null && currentUser) {
       // date picker sets 2 values (start and end date) so we need to check if the end date is not null before making the req
       setLoading(true)
       setError(false)
@@ -69,7 +71,7 @@ const Journal = ({ height }) => {
         setLoading(false)
       })
     }
-  }, [value, currentUser])
+  }, [value, currentUser, update])
 
   return (
     <Box className={classes.container} h={height}>

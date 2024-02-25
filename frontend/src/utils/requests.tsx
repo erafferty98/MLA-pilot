@@ -85,7 +85,6 @@ export const fetchExercises = async (
     //   startDate,
     // ).format('YYYY-MM-DD')}&end=${moment(endDate).format('YYYY-MM-DD')}`
     const response = await axios.get(url)
-    console.log('API Response:', response.data)
     if (response.data.stats && Array.isArray(response.data.stats)) {
       return response.data.stats
     } else {
@@ -102,9 +101,7 @@ export const fetchStatistics = async (currentUser: string) => {
     const url = `http://localhost:5050/stats/${currentUser}`
     // const url = `http://localhost:8080/stats/${currentUser}` // stubs
     const response = await axios.get(url)
-    console.log('API Response:', response.data)
     if (response.data.stats && Array.isArray(response.data.stats)) {
-      console.log('API Response:', response.data)
       return response.data.stats
     } else {
       console.error('Unexpected response structure:', response.data)

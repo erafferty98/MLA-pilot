@@ -19,6 +19,7 @@ import { exercises } from '../../utils/exercises'
 import { addExercise } from '../../utils/requests'
 import classes from './AddExerciseModal.module.css'
 import ExercisePicker from '../ExercisePicker/ExercisePicker'
+import { UpdateContext } from '../../context/UpdateContextProvider'
 
 const errorIcon = (
   <IconAlertCircle style={{ width: rem(18), height: rem(18) }} stroke={2} />
@@ -36,6 +37,7 @@ const AddExerciseModal = ({ close }) => {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(false)
   const { currentUser } = useContext(AuthContext)
+  const { forceUpdate } = useContext(UpdateContext)
   const {
     register,
     handleSubmit,
@@ -56,6 +58,7 @@ const AddExerciseModal = ({ close }) => {
     const response = await addExercise({ ...data, username: currentUser })
     if (response.success === true) {
       setSubmitting(false)
+      forceUpdate()
       close()
     } else {
       setSubmitting(false)
