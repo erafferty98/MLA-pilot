@@ -1,5 +1,13 @@
 'use client'
-import { Flex, Title, Textarea, Button, Alert, rem } from '@mantine/core'
+import {
+  Flex,
+  Title,
+  Textarea,
+  Button,
+  Alert,
+  NumberInput,
+  rem,
+} from '@mantine/core'
 import { useState, useContext } from 'react'
 import { DatePickerInput } from '@mantine/dates'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
@@ -16,6 +24,7 @@ interface IFormInput {
   exerciseDate: Date
   exerciseType: string
   exerciseDescription: string
+  exerciseDuration: number | string
 }
 
 const errorIcon = (
@@ -34,7 +43,13 @@ const AddExerciseModal = ({ close }) => {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(false)
   const { currentUser } = useContext(AuthContext)
-  const { register, handleSubmit, control, setValue } = useForm<IFormInput>({
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    formState: { errors },
+  } = useForm<IFormInput>({
     defaultValues: {
       exerciseDate: new Date(new Date().setHours(0, 0, 0, 0)),
       exerciseType: exercises[0].label,
@@ -83,6 +98,7 @@ const AddExerciseModal = ({ close }) => {
         <Controller
           name="exerciseDescription"
           control={control}
+          rules={{ required: true }}
           render={({ field: { onChange, onBlur, value, ref } }) => (
             <Textarea
               resize="vertical"
@@ -92,6 +108,23 @@ const AddExerciseModal = ({ close }) => {
               w={'100%'}
               value={value}
               onChange={onChange}
+              error={errors.exerciseDescription ? 'Invalid Description' : false}
+            />
+          )}
+        />
+        <Controller
+          name="exerciseDuration"
+          control={control}
+          rules={{ required: true }}
+          render={({ field: { onChange, onBlur, value, ref } }) => (
+            <NumberInput
+              label="Duration"
+              suffix=" minutes"
+              value={value}
+              pt={'1rem'}
+              w={'100%'}
+              onChange={onChange}
+              error={errors.exerciseDuration ? 'Invalid Duration' : false}
             />
           )}
         />

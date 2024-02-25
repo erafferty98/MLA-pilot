@@ -46,8 +46,8 @@ export const signupRequest = async (data: authData) => {
 }
 
 export const addExercise = async (data) => {
-  const url = 'http://localhost:5300/exercises/add'
-  // const url = 'http://localhost:8080/exercises/add' // stubs
+  // const url = 'http://localhost:5300/exercises/add'
+  const url = 'http://localhost:8080/exercises/add' // stubs
   try {
     const response = await axios.post(url, {
       ...data,
@@ -73,12 +73,13 @@ export const fetchExercises = async (
   currentUser: string,
 ) => {
   try {
-    const url = `http://localhost:5050/stats/weekly/?user=${currentUser}&start=${moment(
-      startDate,
-    ).format('YYYY-MM-DD')}&end=${moment(endDate).format('YYYY-MM-DD')}`
-    // const url = `http://localhost:8080/stats/weekly/?user=${currentUser}&start=${moment( // stubs
+    // const url = `http://localhost:5050/stats/weekly/?user=${currentUser}&start=${moment(
     //   startDate,
     // ).format('YYYY-MM-DD')}&end=${moment(endDate).format('YYYY-MM-DD')}`
+    const url = `http://localhost:8080/stats/weekly/?user=${currentUser}&start=${moment(
+      // stubs
+      startDate,
+    ).format('YYYY-MM-DD')}&end=${moment(endDate).format('YYYY-MM-DD')}`
     const response = await axios.get(url)
     console.log('API Response:', response.data)
     if (response.data.stats && Array.isArray(response.data.stats)) {
@@ -94,8 +95,8 @@ export const fetchExercises = async (
 
 export const fetchStatistics = async (currentUser: string) => {
   try {
-    const url = `http://localhost:5050/stats/${currentUser}`
-    // const url = `http://localhost:8080/stats/${currentUser}` // stubs
+    // const url = `http://localhost:5050/stats/${currentUser}`
+    const url = `http://localhost:8080/stats/${currentUser}` // stubs
     const response = await axios.get(url)
     console.log('API Response:', response.data)
     if (response.data.stats && Array.isArray(response.data.stats)) {

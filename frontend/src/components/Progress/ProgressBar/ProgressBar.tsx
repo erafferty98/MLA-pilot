@@ -1,6 +1,21 @@
 import { Box, Flex, Grid, Progress, Text, px } from '@mantine/core'
+import { IconInfoCircle } from '@tabler/icons-react'
+
 import { exercises } from '../../../utils/exercises'
 import classes from './ProgressBar.module.css'
+
+export const EmptyProgressBar = () => {
+  return (
+    <Box className={classes.container}>
+      <Flex align="center" justify="center" h={'100%'}>
+        <IconInfoCircle color="white" />
+        <Text c="white" fw={500} pl="sm">
+          No Exercises Recorded!
+        </Text>
+      </Flex>
+    </Box>
+  )
+}
 
 const ProgressBar = ({ entry, max, index }) => {
   const exercise = exercises.find((item) => item.label === entry.exerciseType)

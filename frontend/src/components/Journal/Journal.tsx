@@ -19,7 +19,7 @@ import { AuthContext } from '../../context/AuthContextProvider'
 import DateSelect from '../DateSelect'
 import classes from './Journal.module.css'
 import { fetchExercises } from '../../utils/requests'
-import JournalEntry from './JournalEntry'
+import JournalEntry, { EmptyJournalEntry } from './JournalEntry'
 import Spinner from '../Spinner'
 import moment from 'moment'
 
@@ -45,22 +45,30 @@ const Journal = ({ height }) => {
     setValue([newStartDate, newEndDate])
   }
 
-  const JournalEntries = data.map((item, index) => {
-    return <JournalEntry entry={item} />
-  })
+  const JournalEntries =
+    data.length != 0 ? (
+      data.map((item, index) => {
+        return <JournalEntry entry={item} />
+      })
+    ) : (
+      <EmptyJournalEntry />
+    )
 
   useEffect(() => {
-    setLoading(true)
-    setError(false)
-    fetchExercises(value[0], value[1], currentUser).then((data) => {
-      if (data === undefined) {
-        setData([])
-        setError(true)
-      } else {
-        setData(data)
-      }
-      setLoading(false)
-    })
+    if (value[1] != null) {
+      // date picker sets 2 values (start and end date) so we need to check if the end date is not null before making the req
+      setLoading(true)
+      setError(false)
+      fetchExercises(value[0], value[1], currentUser).then((data) => {
+        if (data === undefined) {
+          setData([])
+          setError(true)
+        } else {
+          setData(data)
+        }
+        setLoading(false)
+      })
+    }
   }, [value, currentUser])
 
   return (

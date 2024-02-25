@@ -6,7 +6,7 @@ import { AuthContext } from '../../context/AuthContextProvider'
 import classes from './Progress.module.css'
 import { fetchStatistics } from '../../utils/requests'
 import Spinner from '../Spinner'
-import ProgressBar from './ProgressBar'
+import ProgressBar, { EmptyProgressBar } from './ProgressBar'
 
 const Progress = ({ height }) => {
   const [data, setData] = useState([])
@@ -15,9 +15,14 @@ const Progress = ({ height }) => {
   const [maxDuration, setMaxDuration] = useState(0)
   const { currentUser } = useContext(AuthContext)
 
-  const ProgressBars = data.map((item, index) => {
-    return <ProgressBar entry={item} max={maxDuration} index={index} />
-  })
+  const ProgressBars =
+    data.length != 0 ? (
+      data.map((item, index) => {
+        return <ProgressBar entry={item} max={maxDuration} index={index} />
+      })
+    ) : (
+      <EmptyProgressBar />
+    )
 
   useEffect(() => {
     setMaxDuration(

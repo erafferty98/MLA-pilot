@@ -54,6 +54,31 @@ const WeeklyGoal = ({ height }) => {
     })
   }, [value, currentUser])
 
+  const Labels =
+    formattedData.length != 0 ? (
+      formattedData.map((item, index) => (
+        <Flex direction="row" align="center" mb={'1rem'} key={index}>
+          <span
+            style={{ backgroundColor: item.color }}
+            className={classes.dot}
+          ></span>
+          <Text pl={'sm'} c="white">
+            {item.exerciseType}
+          </Text>
+        </Flex>
+      ))
+    ) : (
+      <Flex direction="row" align="center" mb={'1rem'} key={'emptyGoals'}>
+        <span
+          style={{ backgroundColor: 'white' }}
+          className={classes.dot}
+        ></span>
+        <Text pl={'sm'} c="white">
+          No exercises recorded
+        </Text>
+      </Flex>
+    )
+
   return (
     <>
       <Modal opened={opened} onClose={close} size="sm">
@@ -76,7 +101,7 @@ const WeeklyGoal = ({ height }) => {
 
       <Box className={classes.container} h={height}>
         <Grid justify="center">
-          <Grid.Col span={{ base: 0, sm: 1, md: 3 }}></Grid.Col>
+          <Grid.Col span={{ base: 0, sm: 1, md: 1 }}></Grid.Col>
           <Grid.Col span={{ base: 5, sm: 5, md: 6 }} h={'5rem'}>
             <Flex align={'center'} h={'100%'} w={'100%'} justify={'center'}>
               <Title order={2} className={classes.title}>
@@ -84,7 +109,7 @@ const WeeklyGoal = ({ height }) => {
               </Title>
             </Flex>
           </Grid.Col>
-          <Grid.Col span={{ base: 2, sm: 2, md: 3 }}>
+          <Grid.Col span={{ base: 3, sm: 2, md: 4 }}>
             <Flex align={'center'} h={'100%'} w={'100%'} justify={'center'}>
               <ActionIcon variant="transparent" size={36} onClick={open}>
                 <IconEdit size={24} color="white" />
@@ -142,19 +167,10 @@ const WeeklyGoal = ({ height }) => {
               <Flex
                 direction={'column'}
                 justify={'center'}
-                pl={'20%'}
                 w={'100%'}
                 h={'100%'}
               >
-                {formattedData.map((item, index) => (
-                  <Flex direction="row" align="center" mb={'1rem'} key={index}>
-                    <span
-                      style={{ backgroundColor: item.color }}
-                      className={classes.dot}
-                    ></span>
-                    <Text c="white">{item.exerciseType}</Text>
-                  </Flex>
-                ))}
+                {Labels}
               </Flex>
             </Grid.Col>
           </Grid>
