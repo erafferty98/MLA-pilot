@@ -13,13 +13,19 @@ export const loginRequest = async (data: authData) => {
     if (response.status === 200) {
       return { success: true }
     } else {
-      return { success: false, error: 'Invalid credentials' }
+      return {
+        success: false,
+        error: "Looks like there's an issue on our end. Please try again.",
+      }
     }
   } catch (err) {
-    console.log(err)
-    return {
-      success: false,
-      error: "Looks like there's an issue on our end. Please try again.",
+    if (err.response.status === 401) {
+      return { success: false, error: 'Invalid credentials' }
+    } else {
+      return {
+        success: false,
+        error: "Looks like there's an issue on our end. Please try again.",
+      }
     }
   }
 }
