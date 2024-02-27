@@ -2,7 +2,8 @@ import { generateToken } from '../../../utils/tokenUtils'
 
 export async function POST(request: Request) {
   const body = await request.json()
-  const res = await fetch('http://localhost:8080/api/auth/login', {
+  console.log(process.env.AUTH_SERVICE_PATH)
+  const res = await fetch(`${process.env.AUTH_SERVICE_PATH}/api/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
