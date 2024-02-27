@@ -1,3 +1,4 @@
+'use client'
 import {
   Box,
   Grid,
@@ -17,7 +18,7 @@ import { useState, useEffect, useContext } from 'react'
 import { IconInfoCircle, IconEdit, IconCheck } from '@tabler/icons-react'
 import moment from 'moment'
 
-import { AuthContext } from '../../context/AuthContextProvider'
+import { getCurrentUser } from '../../utils/sessionStorage'
 import { UpdateContext } from '../../context/UpdateContextProvider'
 import classes from './WeeklyGoal.module.css'
 import { fetchExercises } from '../../utils/requests'
@@ -34,7 +35,6 @@ const WeeklyGoal = ({ height }) => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [weeklyGoal, setWeeklyGoal] = useState<string | number>(200)
-  const { currentUser } = useContext(AuthContext)
   const { update } = useContext(UpdateContext)
   const [opened, { open, close }] = useDisclosure(false)
 
@@ -43,10 +43,10 @@ const WeeklyGoal = ({ height }) => {
   }, [data, weeklyGoal])
 
   useEffect(() => {
-    if (currentUser) {
+    if (getCurrentUser != null) {
       setLoading(true)
       setError(false)
-      fetchExercises(value[0], value[1], currentUser).then((data) => {
+      fetchExercises(value[0], value[1], getCurrentUser()).then((data) => {
         if (data === undefined) {
           setData([])
           setError(true)
@@ -56,7 +56,7 @@ const WeeklyGoal = ({ height }) => {
         setLoading(false)
       })
     }
-  }, [value, currentUser, update])
+  }, [value, getCurrentUser(), update])
 
   const Labels =
     formattedData.length != 0 ? (

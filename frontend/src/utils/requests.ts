@@ -4,8 +4,9 @@ import axios from 'axios'
 import moment from 'moment'
 
 export const loginRequest = async (data: authData) => {
+  const url = 'http://localhost/api/login'
   try {
-    const response = await axios.post('http://localhost:8080/api/auth/login', {
+    const response = await axios.post(url, {
       username: data.username,
       password: data.password,
     })
@@ -32,7 +33,7 @@ export const loginRequest = async (data: authData) => {
 
 export const signupRequest = async (data: authData) => {
   try {
-    const response = await axios.post('http://localhost:8080/api/auth/signup', {
+    const response = await axios.post('http://localhost:8080/api/signup', {
       username: data.username,
       password: data.password,
     })
@@ -52,8 +53,7 @@ export const signupRequest = async (data: authData) => {
 }
 
 export const addExercise = async (data: ExerciseFormReqType) => {
-  const url = 'http://localhost:5300/exercises/add'
-  // const url = 'http://localhost:8080/exercises/add' // stubs
+  const url = 'http://localhost/api/add-exercise'
   try {
     const response = await axios.post(url, {
       username: data.username,
@@ -83,13 +83,9 @@ export const fetchExercises = async (
   currentUser: string,
 ) => {
   try {
-    const url = `http://localhost:5050/stats/weekly/?user=${currentUser}&start=${moment(
+    const url = `http://localhost/api/weekly-stats?user=${currentUser}&start=${moment(
       startDate,
     ).format('YYYY-MM-DD')}&end=${moment(endDate).format('YYYY-MM-DD')}`
-    // const url = `http://localhost:8080/stats/weekly/?user=${currentUser}&start=${moment(
-    //   // stubs
-    //   startDate,
-    // ).format('YYYY-MM-DD')}&end=${moment(endDate).format('YYYY-MM-DD')}`
     const response = await axios.get(url)
     if (response.data.stats && Array.isArray(response.data.stats)) {
       return response.data.stats
@@ -104,8 +100,7 @@ export const fetchExercises = async (
 
 export const fetchStatistics = async (currentUser: string) => {
   try {
-    const url = `http://localhost:5050/stats/${currentUser}`
-    // const url = `http://localhost:8080/stats/${currentUser}` // stubs
+    const url = `http://localhost/api/stats?user=${currentUser}`
     const response = await axios.get(url)
     if (response.data.stats && Array.isArray(response.data.stats)) {
       return response.data.stats

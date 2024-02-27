@@ -5,10 +5,10 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { useContext, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { AuthContext } from '../../context/AuthContextProvider'
 import { ErrorContext } from '../../context/ErrorContextProvider'
 import classes from './AuthForm.module.css'
 import Spinner from '../Spinner'
+import { setCurrentUser } from '../../utils/sessionStorage'
 
 const lockIcon = (
   <IconLock style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
@@ -35,7 +35,6 @@ const AuthForm = ({
   dataQaIdPrefix: string
 }) => {
   const [submitting, setSubmitting] = useState(false)
-  const { setIsLoggedIn, setCurrentUser } = useContext(AuthContext)
   const { error, errorMessage, setError, clearError } = useContext(ErrorContext)
   const router = useRouter()
   const {
@@ -49,7 +48,6 @@ const AuthForm = ({
     const response = await submitAction(data)
     if (response.success === true) {
       setCurrentUser(data.username)
-      setIsLoggedIn(true)
       setSubmitting(false)
       router.push('/')
     } else {

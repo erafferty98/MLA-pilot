@@ -1,4 +1,5 @@
-import { Container, Grid, SimpleGrid, Skeleton, rem } from '@mantine/core'
+'use client'
+import { Container, Grid, SimpleGrid, rem } from '@mantine/core'
 import Journal from '../Journal'
 import Progress from '../Progress'
 import WeeklyGoal from '../WeeklyGoal'
