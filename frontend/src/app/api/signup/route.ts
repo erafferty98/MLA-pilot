@@ -19,7 +19,7 @@ export async function POST(request: Request) {
 
     const response = new Response(data, {
       status: 200,
-      headers: { 'Set-Cookie': `token=${token}` },
+      headers: { 'Set-Cookie': `authToken=${token}; Path=/` },
     })
     return response
   } else {
