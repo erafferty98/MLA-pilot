@@ -2,17 +2,15 @@ import { generateToken } from '../../../utils/tokenUtils'
 
 export async function POST(request: Request) {
   const body = await request.json()
-  const res = await fetch(
-    `${process.env.AUTH_SERVICE_PATH}/api/auth/register`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'API-Key': process.env.DATA_API_KEY!,
-      },
-      body: JSON.stringify(body),
+  console.log(body)
+  const res = await fetch(`${process.env.AUTH_SERVICE_PATH}/api/auth/signup`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'API-Key': process.env.DATA_API_KEY!,
     },
-  )
+    body: JSON.stringify(body),
+  })
 
   if (res.status === 200) {
     const data = await res.text()
