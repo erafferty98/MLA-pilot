@@ -8,8 +8,10 @@ const Journal = ({ currentUser }) => {
   const [startDate, setStartDate] = useState(moment().startOf('week').toDate());
   const [endDate, setEndDate] = useState(moment().endOf('week').toDate());
   const [exercises, setExercises] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchExercises = async () => {
+    setLoading(true);
     try {
       const url = `http://localhost:5050/stats/weekly/?user=${currentUser}&start=${moment(startDate).format('YYYY-MM-DD')}&end=${moment(endDate).format('YYYY-MM-DD')}`;
       const response = await axios.get(url);
@@ -22,6 +24,8 @@ const Journal = ({ currentUser }) => {
       }
     } catch (error) {
       console.error('Failed to fetch exercises', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -39,6 +43,9 @@ const Journal = ({ currentUser }) => {
     setEndDate(moment(endDate).add(1, 'weeks').endOf('week').toDate());
   };
 
+
+
+
   return (
     <div className="journal-container">
       <h4>Weekly Exercise Journal</h4>
@@ -51,13 +58,13 @@ const Journal = ({ currentUser }) => {
       <ul>
         {exercises && exercises.length > 0 ? (
           exercises.map((exercise, index) => (
-            <li key={index} className="exercise-journal-data">
-              {exercise.exerciseType} - {exercise.totalDuration} minutes
-            </li>
+          <li key={index} className={`exercise-journal-data exercise-${exercise.exerciseType.replace(/\s+/g, '')}`}>
+            {exercise.exerciseType} - {exercise.totalDuration} minutes
+          </li>
           ))
-        ) : (
+          ) : (
           <li>No exercises found for this period.</li>
-        )}
+          )}
       </ul>
     </div>
   );

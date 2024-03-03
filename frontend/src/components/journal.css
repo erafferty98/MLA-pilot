@@ -22,6 +22,7 @@
 
 ul {
     padding-left: 0;
+    margin: 0;
 }
 
 li {
@@ -36,3 +37,35 @@ li {
     padding: 5px 10px;
     font-size: 0.8rem;
 }
+
+/* New CSS for calendar view */
+.week-view {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px; /* Space between days and exercise list */
+}
+
+.day {
+    background: #ddd; /* Slightly darker background for day columns */
+    padding: 5px;
+    border-radius: 3px;
+    flex-grow: 1;
+    text-align: center;
+    margin: 0 2px; /* Small gap between days */
+}
+
+/* Assuming exercise entries within a day */
+.exercise-entry {
+    background: #ccc; /* Default background for exercise entries */
+    margin: 5px 0; /* Margin between entries */
+    padding: 5px;
+    border-radius: 2px;
+    font-size: 0.9rem;
+}
+
+/* Color coding for different exercise types */
+.exercise-Running { background-color: lightblue; }
+.exercise-Cycling { background-color: lightgreen; }
+.exercise-Swimming { background-color: lightcoral; }
+.exercise-Gym { background-color: wheat; }
+.exercise-Other { background-color: lightgrey; }
