@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Row, Col } from 'react-bootstrap';
 import { trackExercise } from '../api';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import IconButton from '@material-ui/core/IconButton';
@@ -17,8 +17,12 @@ const TrackExercise = ({ currentUser }) => {
     description: '',
     duration: 0,
     date: new Date(),
+    sets: 0,
+    reps: 0,
+    weight: 0,
+    weightliftingExercise: 'Freeform', // Default to Freeform
   });
-  const [message, setMessage] = useState(''); 
+  const [message, setMessage] = useState('');
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -37,11 +41,14 @@ const TrackExercise = ({ currentUser }) => {
         description: '',
         duration: 0,
         date: new Date(),
+        sets: 0,
+        reps: 0,
+        weight: 0,
+        weightliftingExercise: 'Freeform',
       });
 
       setMessage('Activity logged successfully! Well done!');
       setTimeout(() => setMessage(''), 2000);
-      
     } catch (error) {
       console.error('There was an error logging your activity!', error);
     }
@@ -49,9 +56,8 @@ const TrackExercise = ({ currentUser }) => {
 
   return (
     <div>
-      <h3>Track exercise</h3>
+      <h3>Track Exercise</h3>
       <Form onSubmit={onSubmit} style={{ maxWidth: '400px', margin: 'auto' }}>
-        
         <Form.Group controlId="formDate" className="form-margin">
           <Form.Label>Date:</Form.Label>
           <DatePicker 
@@ -96,11 +102,42 @@ const TrackExercise = ({ currentUser }) => {
             onChange={(e) => setState({ ...state, duration: e.target.value })}
           />
         </Form.Group>
-        <Button variant="success" type="submit">
-          Save activity
-        </Button>
+
+        {state.exerciseType === 'Gym' && (
+          <>
+            <Form.Group as={Row} controlId="weightliftingExercise">
+              <Form.Label column sm={3}>Exercise:</Form.Label>
+              <Col sm={9}>
+                <Form.Control as="select" value={state.weightliftingExercise} onChange={(e) => setState({ ...state, weightliftingExercise: e.target.value })}>
+                  <option>Squats</option>
+                  <option>Bench Press</option>
+                  <option>Deadlift</option>
+                  <option>Overhead Press</option>
+                  <option>Bent Over Row</option>
+                  <option>Clean and Jerk</option>
+                  <option>Snatch</option>
+                  <option>Freeform</option>
+                </Form.Control>
+              </Col>
+            </Form.Group>
+            <Form.Group controlId="sets">
+              <Form.Label>Sets:</Form.Label>
+              <Form.Control type="number" value={state.sets} onChange={(e) => setState({ ...state, sets: e.target.value })} />
+            </Form.Group>
+            <Form.Group controlId="reps">
+              <Form.Label>Reps:</Form.Label>
+              <Form.Control type="number" value={state.reps} onChange={(e) => setState({ ...state, reps: e.target.value })} />
+            </Form.Group>
+            <Form.Group controlId="weight">
+              <Form.Label>Weight (lbs/kg):</Form.Label>
+              <Form.Control type="number" value={state.weight} onChange={(e) => setState({ ...state, weight: e.target.value })} />
+            </Form.Group>
+          </>
+        )}
+
+        <Button variant="success" type="submit">Save Activity</Button>
       </Form>
-      {message && <p style={{color: 'green'}}>{message}</p>}
+      {message && <p style={{ color: 'green' }}>{message}</p>}
     </div>
   );
 };
