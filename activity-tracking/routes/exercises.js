@@ -15,24 +15,36 @@ router.get('/', async (req, res) => {
   
 // POST: Add a new exercise
 router.post('/add', async (req, res) => {
-  console.log(req.body)
+console.log(req.body)
   try {
-    const { username, exerciseType, description, duration, date } = req.body;
+      const { username, exerciseType, subcategory, description, duration, date, sets, reps, weightLifted } = req.body;
+      const newExercise = new Exercise({
+          username,
+          exerciseType,
+          description,
+          duration: Number(duration),
+          date: Date.parse(date)
+      };
 
-    const newExercise = new Exercise({
-      username,
-      exerciseType,
-      description,
-      duration: Number(duration),
-      date: Date.parse(date),
-    });
+      // Only add gym-specific fields if exerciseType is 'Gym'
+      if (exerciseType === 'Gym') {
+          exerciseData = {
+              ...exerciseData,
+              subcategory,
+              sets: Number(sets),
+              reps: Number(reps),
+              weightLifted: Number(weightLifted),
+          };
+      }
 
-    await newExercise.save();
-    res.json({ message: 'Exercise added!' });
+      const newExercise = new Exercise(exerciseData);
+      await newExercise.save();
+      res.json({ message: 'Exercise added!' });
   } catch (error) {
-    res.status(400).json({ error: 'Error: ' + error.message });
+      res.status(400).json({ error: 'Error: ' + error.message });
   }
 });
+
 
 // GET: Retrieve an exercise by ID
 router.get('/:id', async (req, res) => {
@@ -64,32 +76,46 @@ router.delete('/:id', async (req, res) => {
 
 // PUT: Update an exercise by ID
 router.put('/update/:id', async (req, res) => {
-    try {
-      const { username, description, duration, date } = req.body;
-  
-      if (!username || !description || !duration || !date) {
-        res.status(400).json({ error: 'All fields are required' });
-        return;
+  try {
+      const { username, exerciseType, subCategory, description, duration, date, sets, reps, weightLifted } = req.body;
+
+      if (!username || !exerciseType || !description || !duration || !date) {
+          res.status(400).json({ error: 'All fields are required' });
+          return;
       }
-  
+
       const exercise = await Exercise.findById(req.params.id);
       if (!exercise) {
-        res.status(404).json({ error: 'Exercise not found' });
-        return;
+          res.status(404).json({ error: 'Exercise not found' });
+          return;
       }
-  
-      exercise.username = username;
+
+            exercise.username = username;
       exercise.exerciseType = exerciseType;
       exercise.description = description;
       exercise.duration = Number(duration);
       exercise.date = new Date(date);
-  
+
+      // Conditionally update gym-specific fields
+      if (exerciseType === 'Gym') {
+          exercise.subcategory = subcategory;
+          exercise.sets = Number(sets);
+          exercise.reps = Number(reps);
+          exercise.weightLifted = Number(weightLifted);
+      } else {
+          // Optionally clear out the gym-specific fields if changing to a different type
+          exercise.subCategory = null;
+          exercise.sets = null;
+          exercise.reps = null;
+          exercise.weightLifted = null;
+      }
+
       await exercise.save();
       res.json({ message: 'Exercise updated!', exercise });
-    } catch (error) {
+  } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'An error occurred while updating the exercise' });
-    }
-  });
-  
+  }
+});
+
   module.exports = router;

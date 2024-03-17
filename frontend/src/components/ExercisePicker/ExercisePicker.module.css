@@ -30,3 +30,13 @@
   transition: transform 150ms ease;
   transform: rotate(0deg);
 }
+
+.control:focus {
+  outline: none;
+  border-color: var(--mantine-color-primary);
+}
+
+.control.error {
+  border-color: var(--mantine-color-red);
+}
+

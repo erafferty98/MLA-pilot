@@ -4,24 +4,45 @@ import { IconChevronDown } from '@tabler/icons-react'
 import { exercises } from '../../utils/exercises'
 import classes from './ExercisePicker.module.css'
 
-const ExercisePicker = ({ setValue, name }) => {
-  const [opened, setOpened] = useState(false)
-  const [selected, setSelected] = useState(exercises[0])
+const ExercisePicker = ({ onChange, name, value }) => {
+  const [opened, setOpened] = useState(false);
+  const [selected, setSelected] = useState(exercises[0]);
 
   const setSelectedWider = (value) => {
-    setSelected(value)
-    setValue(name, value.label)
-  }
+    setSelected(value);
+    onChange(value); // Call the onChange prop with the selected value
+  };
+
+  const handleSubcategorySelect = (subcategory) => {
+    setSelected(subcategory);
+    onChange(subcategory); // Call the onChange prop with the selected value
+    setOpened(false); // Close the dropdown after selecting a subcategory
+  };
+
+  const renderSubcategories = () => {
+    if (selected.subsections && selected.subsections.length > 0) {
+      return selected.subsections.map((subsection) => (
+        <Menu.Item
+          onClick={() => handleSubcategorySelect(subsection)}
+          key={subsection.label}
+        >
+          {subsection.label}
+        </Menu.Item>
+      ));
+    }
+    return null;
+  };
 
   const items = exercises.map((item) => (
     <Menu.Item
-      leftSection={<item.icon />}
+      leftSection={React.createElement(item.icon)} // Dynamically create the icon component
       onClick={() => setSelectedWider(item)}
       key={item.label}
     >
       {item.label}
     </Menu.Item>
-  ))
+  ));
+
 
   return (
     <>
@@ -41,7 +62,7 @@ const ExercisePicker = ({ setValue, name }) => {
             data-expanded={opened || undefined}
           >
             <Group gap="xs">
-              <selected.icon />
+              {selected.icon && <selected.icon />}
               <span className={classes.label}>{selected.label}</span>
             </Group>
             <IconChevronDown
@@ -51,9 +72,13 @@ const ExercisePicker = ({ setValue, name }) => {
             />
           </UnstyledButton>
         </Menu.Target>
-        <Menu.Dropdown>{items}</Menu.Dropdown>
+        <Menu.Dropdown>
+          {items}
+          {renderSubcategories()}
+        </Menu.Dropdown>
       </Menu>
     </>
-  )
-}
-export default ExercisePicker
+  );
+};
+
+export default ExercisePicker;
