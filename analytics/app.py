@@ -36,9 +36,32 @@ def stats():
             "$group": {
                 "_id": {
                     "username": "$username",
-                    "exerciseType": "$exerciseType"
+                    "exerciseType": "$exerciseType",
+                    "subcategory": "$subcategory"
                 },
-                "totalDuration": {"$sum": "$duration"}
+                "totalDuration": {"$sum": "$duration"},
+                "totalSets": {"$sum": "$sets"},
+                "totalReps": {"$sum": "$reps"},
+                "averageWeightLifted": {"$avg": "$weightLifted"}
+            }
+        },
+        {
+            "$group": {
+                "_id": {
+                    "username": "$_id.username",
+                    "exerciseType": "$_id.exerciseType"
+                },
+                "exerciseTypes": {
+                    "$push": {
+                        "exerciseType": "$_id.exerciseType",
+                        "subcategory": "$_id.subcategory",
+                        "totalDuration": "$totalDuration",
+                        "totalSets": "$totalSets",
+                        "totalReps": "$totalReps",
+                        "averageWeightLifted": "$averageWeightLifted"
+                    }
+                },
+                "totalDuration": {"$sum": "$totalDuration"}  # Calculate total duration of all exercises
             }
         },
         {
@@ -47,15 +70,18 @@ def stats():
                 "exercises": {
                     "$push": {
                         "exerciseType": "$_id.exerciseType",
+                        "exerciseTypes": "$exerciseTypes",
                         "totalDuration": "$totalDuration"
                     }
-                }
+                },
+                "totalDuration": {"$sum": "$totalDuration"}  # Calculate total duration of all exercises
             }
         },
         {
             "$project": {
                 "username": "$_id",
                 "exercises": 1,
+                "totalDuration": 1,
                 "_id": 0
             }
         }

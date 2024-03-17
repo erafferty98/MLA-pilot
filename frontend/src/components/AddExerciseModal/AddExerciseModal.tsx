@@ -48,7 +48,11 @@ const AddExerciseModal = ({ close }) => {
     defaultValues: {
       exerciseDate: new Date(new Date().setHours(0, 0, 0, 0)),
       exerciseType: exercises[0].label,
+      exerciseSubcategory: '',
       exerciseDescription: '',
+      sets: 0, // Default value
+      reps: 0, // Default value
+      weightLifted: 0, // Default value
     },
   })
 
@@ -91,6 +95,34 @@ const AddExerciseModal = ({ close }) => {
             <ExercisePicker {...register('exerciseType')} setValue={setValue} />
           )}
         />
+        {selectedExerciseType === 'Gym' && (
+          <>
+            <Controller
+              name="sets"
+              control={control}
+              rules={{ required: true, min: 1 }}
+              render={({ field }) => (
+                <NumberInput {...field} label="Sets Count" min={1} error={errors.sets ? 'Invalid sets count' : false} pt={'1rem'} w={'100%'} />
+              )}
+            />
+            <Controller
+              name="reps"
+              control={control}
+              rules={{ required: true, min: 1 }}
+              render={({ field }) => (
+                <NumberInput {...field} label="Reps Count" min={1} error={errors.reps ? 'Invalid reps count' : false} pt={'1rem'} w={'100%'} />
+              )}
+            />
+            <Controller
+              name="weightLifted"
+              control={control}
+              rules={{ required: true, min: 0 }}
+              render={({ field }) => (
+                <NumberInput {...field} label="Weight Lifted (kgs)" min={0} error={errors.weightLifted ? 'Invalid weight' : false} pt={'1rem'} w={'100%'} />
+              )}
+            />
+          </>
+        )}
         <Controller
           name="exerciseDescription"
           control={control}

@@ -58,8 +58,12 @@ export const addExercise = async (data: ExerciseFormReqType) => {
     const response = await axios.post(url, {
       username: data.username,
       exerciseType: data.exerciseType,
+      exerciseSubcategory: data.exerciseSubcategory,
       description: data.exerciseDescription,
       duration: data.exerciseDuration,
+      sets: data.sets,
+      reps: data.reps,
+      weightLifted: data.weightLifted,
       date: data.exerciseDate,
     })
 

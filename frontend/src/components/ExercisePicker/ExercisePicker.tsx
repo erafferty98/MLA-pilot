@@ -13,6 +13,26 @@ const ExercisePicker = ({ setValue, name }) => {
     setValue(name, value.label)
   }
 
+  const handleSubcategorySelect = (subcategory) => {
+    setSelected(subcategory);
+    onChange(subcategory); // Call the onChange prop with the selected value
+    setOpened(false); // Close the dropdown after selecting a subcategory
+  };
+
+  const renderSubcategories = () => {
+    if (selected.subsections && selected.subsections.length > 0) {
+      return selected.subsections.map((subsection) => (
+        <Menu.Item
+          onClick={() => handleSubcategorySelect(subsection)}
+          key={subsection.label}
+        >
+          {subsection.label}
+        </Menu.Item>
+      ));
+    }
+    return null;
+  };
+
   const items = exercises.map((item) => (
     <Menu.Item
       leftSection={<item.icon />}
@@ -51,7 +71,10 @@ const ExercisePicker = ({ setValue, name }) => {
             />
           </UnstyledButton>
         </Menu.Target>
-        <Menu.Dropdown>{items}</Menu.Dropdown>
+        <Menu.Dropdown>
+          {items}
+          {renderSubcategories()}
+        </Menu.Dropdown>
       </Menu>
     </>
   )
