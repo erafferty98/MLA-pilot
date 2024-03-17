@@ -1,0 +1,71 @@
+.journal-container {
+    max-width: 600px;
+    margin: auto;
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.exercise-journal-data {
+    margin-bottom: 10px;
+    padding-top: 20px;
+}
+
+.date-range {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+ul {
+    padding-left: 0;
+    margin: 0;
+}
+
+li {
+    list-style-type: none;
+    background: #e0e0e0;
+    margin-bottom: 5px;
+    padding: 10px;
+    border-radius: 3px;
+}
+
+.button-small {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+}
+
+/* New CSS for calendar view */
+.week-view {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px; /* Space between days and exercise list */
+}
+
+.day {
+    background: #ddd; /* Slightly darker background for day columns */
+    padding: 5px;
+    border-radius: 3px;
+    flex-grow: 1;
+    text-align: center;
+    margin: 0 2px; /* Small gap between days */
+}
+
+/* Assuming exercise entries within a day */
+.exercise-entry {
+    background: #ccc; /* Default background for exercise entries */
+    margin: 5px 0; /* Margin between entries */
+    padding: 5px;
+    border-radius: 2px;
+    font-size: 0.9rem;
+}
+
+/* Color coding for different exercise types */
+.exercise-Running { background-color: lightblue; }
+.exercise-Cycling { background-color: lightgreen; }
+.exercise-Swimming { background-color: lightcoral; }
+.exercise-Gym { background-color: wheat; }
+.exercise-Other { background-color: lightgrey; }
