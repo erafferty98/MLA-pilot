@@ -14,7 +14,7 @@ import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { IconAlertCircle } from '@tabler/icons-react'
 
 import Spinner from '../Spinner'
-import { AuthContext } from '../../context/AuthContextProvider'
+import { getCurrentUser } from '../../utils/sessionStorage'
 import { exercises } from '../../utils/exercises'
 import { addExercise } from '../../utils/requests'
 import classes from './AddExerciseModal.module.css'
@@ -36,7 +36,6 @@ export const AddExercieModalTitle = () => {
 const AddExerciseModal = ({ close }) => {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(false)
-  const { currentUser } = useContext(AuthContext)
   const { forceUpdate } = useContext(UpdateContext)
   const {
     register,
@@ -55,7 +54,7 @@ const AddExerciseModal = ({ close }) => {
   const onSubmit: SubmitHandler<ExerciseFormInputType> = async (data) => {
     setError(false)
     setSubmitting(true)
-    const response = await addExercise({ ...data, username: currentUser })
+    const response = await addExercise({ ...data, username: getCurrentUser() })
     if (response.success === true) {
       setSubmitting(false)
       forceUpdate()

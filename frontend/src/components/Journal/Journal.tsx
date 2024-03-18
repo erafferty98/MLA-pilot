@@ -1,3 +1,4 @@
+'use client'
 import {
   Box,
   Grid,
@@ -15,7 +16,6 @@ import {
   IconInfoCircle,
 } from '@tabler/icons-react'
 
-import { AuthContext } from '../../context/AuthContextProvider'
 import { UpdateContext } from '../../context/UpdateContextProvider'
 import DateSelect from '../DateSelect'
 import classes from './Journal.module.css'
@@ -23,6 +23,7 @@ import { fetchExercises } from '../../utils/requests'
 import JournalEntry, { EmptyJournalEntry } from './JournalEntry'
 import Spinner from '../Spinner'
 import moment from 'moment'
+import { getCurrentUser } from '../../utils/sessionStorage'
 
 const Journal = ({ height }) => {
   const defaultDateValue = new Date()
@@ -34,7 +35,6 @@ const Journal = ({ height }) => {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
-  const { currentUser } = useContext(AuthContext)
   const { update } = useContext(UpdateContext)
   const incrementDate = () => {
     const newStartDate = moment(value[0]).add(7, 'days').toDate()
@@ -57,11 +57,11 @@ const Journal = ({ height }) => {
     )
 
   useEffect(() => {
-    if (value[1] != null && currentUser) {
+    if (value[1] != null && getCurrentUser() != null) {
       // date picker sets 2 values (start and end date) so we need to check if the end date is not null before making the req
       setLoading(true)
       setError(false)
-      fetchExercises(value[0], value[1], currentUser).then((data) => {
+      fetchExercises(value[0], value[1], getCurrentUser()).then((data) => {
         if (data === undefined) {
           setData([])
           setError(true)
@@ -71,7 +71,7 @@ const Journal = ({ height }) => {
         setLoading(false)
       })
     }
-  }, [value, currentUser, update])
+  }, [value, getCurrentUser(), update])
 
   return (
     <Box className={classes.container} h={height}>

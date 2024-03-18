@@ -1,6 +1,6 @@
 'use client'
 
-import { useContext } from 'react'
+import { useCookies } from 'react-cookie'
 import { Container, Group, Burger, Drawer } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconSquarePlus, IconLogout } from '@tabler/icons-react'
@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 import classes from './Header.module.css'
 import Image from 'next/image'
 import { Modal, Button } from '@mantine/core'
-import { AuthContext } from '../../context/AuthContextProvider'
+import { clearCurrentUser } from '../../utils/sessionStorage'
 import AddExerciseModal, { AddExercieModalTitle } from '../AddExerciseModal'
 
 const Header = () => {
@@ -17,11 +17,11 @@ const Header = () => {
     useDisclosure(false)
   const [openedDrawer, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false)
-  const { setIsLoggedIn, setCurrentUser } = useContext(AuthContext)
+  const [cookies, setCookie, removeCookie] = useCookies(['authToken'])
 
   const logout = () => {
-    setIsLoggedIn(false)
-    setCurrentUser('')
+    clearCurrentUser()
+    removeCookie('authToken')
     router.push('/login')
   }
   const addEventModal = () => {

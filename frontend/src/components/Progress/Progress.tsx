@@ -1,8 +1,9 @@
+'use client'
 import { Box, Grid, Title, Flex, Center, Alert } from '@mantine/core'
 import { useState, useEffect, useContext } from 'react'
 import { IconInfoCircle } from '@tabler/icons-react'
 
-import { AuthContext } from '../../context/AuthContextProvider'
+import { getCurrentUser } from '../../utils/sessionStorage'
 import { UpdateContext } from '../../context/UpdateContextProvider'
 import classes from './Progress.module.css'
 import { fetchStatistics } from '../../utils/requests'
@@ -14,7 +15,6 @@ const Progress = ({ height }) => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [maxDuration, setMaxDuration] = useState(0)
-  const { currentUser } = useContext(AuthContext)
   const { update } = useContext(UpdateContext)
 
   const ProgressBars =
@@ -37,10 +37,10 @@ const Progress = ({ height }) => {
     [data]
 
   useEffect(() => {
-    if (currentUser) {
+    if (getCurrentUser() != null) {
       setLoading(true)
       setError(false)
-      fetchStatistics(currentUser).then((data) => {
+      fetchStatistics(getCurrentUser()).then((data) => {
         if (data === undefined) {
           setData([])
           setError(true)
@@ -52,7 +52,7 @@ const Progress = ({ height }) => {
         setLoading(false)
       })
     }
-  }, [currentUser, update])
+  }, [getCurrentUser(), update])
 
   return (
     <Box className={classes.container} h={height}>
