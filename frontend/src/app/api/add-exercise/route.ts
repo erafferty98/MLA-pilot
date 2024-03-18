@@ -1,6 +1,6 @@
 export async function POST(request: Request) {
   const body = await request.json()
-  const url = `http://activity-tracking/exercises/add`
+  const url = `${process.env.ACTIVITY_TRACKING_SERVICE_PATH}/exercises/add`
   const res = await fetch(url, {
     method: 'POST',
     headers: {

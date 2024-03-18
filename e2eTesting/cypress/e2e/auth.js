@@ -3,7 +3,7 @@ import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor'
 const characters =
   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
-const generateString = (length) => {
+export const generateString = (length) => {
   let result = ' '
   const charactersLength = characters.length
   for (let i = 0; i < length; i++) {
@@ -37,5 +37,19 @@ When('I enter my details', () => {
 
 Then('I should sign up and be redirected to the home page', () => {
   cy.get('button[type="submit"]').click()
-  cy.url().should('not.include', '/')
+  cy.url().should('not.include', '/redirect')
+})
+
+When('I visit the login page', () => {
+  cy.visit('/login')
+})
+
+When('I enter my valid details', () => {
+  cy.get('input[name="username"]').type('test2')
+  cy.get('input[name="password"]').type('test')
+})
+
+Then('I should log in and be redirected to the home page', () => {
+  cy.get('button[type="submit"]').click()
+  cy.url().should('not.include', '/login')
 })

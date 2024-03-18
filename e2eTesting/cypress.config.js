@@ -20,7 +20,7 @@ async function setupNodeEvents(on, config) {
 
 export default defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:80',
+    baseUrl: 'http://localhost:3000',
     specPattern: '**/*.feature',
     setupNodeEvents,
   },

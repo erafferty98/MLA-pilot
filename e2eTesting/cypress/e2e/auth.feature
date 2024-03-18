@@ -9,3 +9,9 @@ Feature: Auth
     When I visit the signup page
     And I enter my details
     Then I should sign up and be redirected to the home page
+
+  Scenario: Log In User
+    Given I am not a logged in user
+    When I visit the login page
+    And I enter my valid details
+    Then I should log in and be redirected to the home page
