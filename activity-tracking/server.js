@@ -28,9 +28,7 @@ connection.on('error', (error) => {
 
 // Routes
 const exercisesRouter = require('./routes/exercises');
-const chatbotRouter = require('./routes/chatbot');
 app.use('/exercises', exercisesRouter);
-app.use('/chatbot', chatbotRouter);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
