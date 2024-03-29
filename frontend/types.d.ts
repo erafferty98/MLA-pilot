@@ -11,8 +11,12 @@ type JournalEntryType = {
 type ExerciseFormInputType = {
   exerciseDate: Date
   exerciseType: string
+  exerciseSubcategory: string
   exerciseDescription: string
   exerciseDuration: number | string
+  sets: number
+  reps: number
+  weightLifted: number
 }
 
 type ExerciseFormReqType = ExerciseFormInputType & { username: string }
