@@ -11,7 +11,7 @@ def create_app():
 
     client = MongoClient(app.config['MONGO_URI'])
     app.db = client[app.config['MONGO_DB']]
-    user_collection = app.db['users']
+    app.user_collection = app.db['users']
 
     with app.app_context():
         from . import routes
