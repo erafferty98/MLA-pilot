@@ -1,0 +1,75 @@
+/* Chatbot Container */
+.chatbot-container {
+    position: fixed;
+    bottom: var(--mantine-spacing-md);
+    right: var(--mantine-spacing-md);
+    border-radius: var(--mantine-radius-md);
+    border: calc(0.0625rem * var(--mantine-scale)) solid var(--mantine-color-gray-4);
+    background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-6));
+    transition: background-color 150ms ease;
+    z-index: 1000;
+    width: 300px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .chatbot-header {
+    padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+    font-size: var(--mantine-font-size-sm);
+    border-bottom: calc(0.0625rem * var(--mantine-scale)) solid var(--mantine-color-gray-4);
+  }
+
+  .chatbot-messages {
+    overflow-y: scroll;
+    flex-grow: 1;
+    padding: var(--mantine-spacing-xs);
+  }
+
+  .chatbot-input-area {
+    border-top: calc(0.0625rem * var(--mantine-scale)) solid var(--mantine-color-gray-4);
+    padding: var(--mantine-spacing-xs);
+  }
+
+  /* Input, Textarea, Button */
+  .chatbot-input, .chatbot-textarea, .chatbot-button {
+    width: 100%;
+    padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
+    margin: var(--mantine-spacing-xs) 0;
+    border-radius: var(--mantine-radius-md);
+    border: calc(0.0625rem * var(--mantine-scale)) solid var(--mantine-color-gray-4);
+    font-size: var(--mantine-font-size-sm);
+    background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-6));
+    transition: background-color 150ms ease, transform 150ms ease;
+  }
+
+  .chatbot-button {
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  /* Hover Effects */
+  .chatbot-input:hover, .chatbot-textarea:hover, .chatbot-button:hover {
+    background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-5));
+  }
+
+  /* Adapted from your original CSS for icon rotation */
+  .icon {
+    transition: transform 150ms ease;
+    transform: rotate(0deg);
+  }
+
+  /* For minimizing/maximizing chatbot */
+  .icon.minimized {
+    transform: rotate(-180deg);
+  }
+
+  /* Response area */
+  #chatbot-response {
+    margin-top: var(--mantine-spacing-xs);
+  }
