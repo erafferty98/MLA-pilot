@@ -51,9 +51,6 @@ public class UserService {
             // Create a new user
             User newUser = new User();
             newUser.setUsername(email);
-            // Assuming the name attribute is available
-            newUser.setName(oAuth2User.getAttribute("name"));
-            // Set other properties as needed
 
             // Handle setting a non-null password or using a placeholder if your User entity requires a password
             newUser.setPassword(passwordEncoder.encode("A placeholder password"));
