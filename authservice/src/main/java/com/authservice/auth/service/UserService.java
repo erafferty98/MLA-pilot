@@ -6,8 +6,9 @@ import org.passay.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
 @Service
 public class UserService {
@@ -19,7 +20,13 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public boolean isValidEmail(String email) {
-        return EmailValidator.getInstance().isValid(email);
+        try {
+            InternetAddress internetAddress = new InternetAddress(email);
+            internetAddress.validate();
+            return true;
+        } catch (AddressException e) {
+            return false;
+        }
     }
 
     public boolean isValidPassword(String password) {

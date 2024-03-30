@@ -20,9 +20,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.passay:passay:1.6.0") // Add Passay dependency
-	implementation("commons-validator:commons-validator:1.8.0") // Corrected Commons Validator dependency
 	implementation ("org.springframework.boot:spring-boot-starter-oauth2-client") // Add Spring OAuth2 dependency
 	implementation("javax.validation:validation-api:2.0.1.Final") // Add javax.validation dependency
+	implementation ("com.sun.mail:javax.mail:1.6.2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
 }
