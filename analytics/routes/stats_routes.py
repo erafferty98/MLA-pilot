@@ -1,8 +1,10 @@
-from flask import jsonify, request
-from ..models.exercise_model import *
+from flask import Blueprint, jsonify, request
 from datetime import datetime, timedelta
 import logging
-from . import stats_blueprint
+from ..models.exercise_model import *
+
+# Create the stats blueprint
+stats_blueprint = Blueprint('stats', __name__)
 
 # Route to get all exercises
 @stats_blueprint.route('/', methods=['GET'])

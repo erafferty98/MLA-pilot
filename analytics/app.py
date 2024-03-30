@@ -1,4 +1,4 @@
-from analytics.app import create_app
+from analytics import create_app
 import os
 
 app = create_app()

@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
-from app.utils.db import initialize_db
-from app.routes.stats_routes import stats_blueprint
+from .utils import initialize_db
+from .routes.stats_routes import stats_blueprint
 
 def create_app():
     app = Flask(__name__)
