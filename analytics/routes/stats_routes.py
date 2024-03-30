@@ -1,14 +1,8 @@
-from flask import Blueprint, jsonify, request
-from .models.exercise_model import (
-    get_all_exercises,
-    aggregate_general_stats,
-    aggregate_user_stats,
-    aggregate_weekly_stats
-)
+from flask import jsonify, request
+from ..models.exercise_model import *
 from datetime import datetime, timedelta
 import logging
-
-stats_blueprint = Blueprint('stats', __name__)
+from . import stats_blueprint
 
 # Route to get all exercises
 @stats_blueprint.route('/', methods=['GET'])
