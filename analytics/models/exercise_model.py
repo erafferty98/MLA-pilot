@@ -1,6 +1,6 @@
 # models/exercise_model.py
 
-from app.utils.db import get_db
+from analytics.utils import get_db
 from bson import ObjectId
 from datetime import datetime
 
