@@ -52,7 +52,7 @@
     "postcss": "^8.4.35",
     "postcss-preset-mantine": "^1.13.0",
     "postcss-simple-vars": "^7.0.1",
-    "stubby": "^5.1.0",
+    "stubby": "^0.1.40",
     "typescript": "5.3.3"
   }
 }

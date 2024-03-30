@@ -27,6 +27,28 @@
                         <span class="duration">{{ activity["duration"] }} minutes</span>
                     </li>
                 {% endfor %}
+                {% if "Gym" in activities %}
+                <li>Gym:
+                    <ul class="subcategories">
+                        <li><a href="analytics/templates/exercise/squat.html">Squat - How to Squat</a></li>
+                        <li><a href="/analytics/templates/exercise/bench-press.html">Bench Press - How to Bench Press</a></li>
+                        <li><a href="/analytics/templates/exercise/deadlift.html">Deadlift - How to Deadlift</a></li>
+                        <li><a href="/analytics/templates/exercise/overhead-press.html">Overhead Press - How to Overhead Press</a></li>
+                        <li><a href="/analytics/templates/exercise/bent-over-row.html">Bent Over Row - How to Bent Over Row</a></li>
+                        <!-- Import the calculations module -->
+                        <script src="/analytics/utils/calculations.py"></script>
+
+                        <!-- Call the calculate_1rm function -->
+                        <script>
+                            // Assuming you have the necessary inputs
+                            var weight = 100;
+                            var reps = 5;
+                            var oneRepMax = calculations.calculate_1rm(weight, reps);
+                            console.log("1 Rep Max: " + oneRepMax);
+                        </script>
+                    </ul>
+                </li>
+            {% endif %}
             </ul>
         {% else %}
             <div class="danger">

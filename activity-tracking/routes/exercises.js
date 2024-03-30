@@ -27,6 +27,18 @@ router.post('/add', async (req, res) => {
       date: Date.parse(date),
     });
 
+
+    // Only add gym-specific fields if exerciseType is 'Gym'
+    if (exerciseType === 'Gym') {
+      exerciseData = {
+          ...exerciseData,
+          subcategory,
+          sets: Number(sets),
+          reps: Number(reps),
+          weightLifted: Number(weightLifted),
+      };
+  }
+
     await newExercise.save();
     res.json({ message: 'Exercise added!' });
   } catch (error) {
@@ -83,6 +95,20 @@ router.put('/update/:id', async (req, res) => {
       exercise.description = description;
       exercise.duration = Number(duration);
       exercise.date = new Date(date);
+
+      // Conditionally update gym-specific fields
+      if (exerciseType === 'Gym') {
+        exercise.subcategory = subcategory;
+        exercise.sets = Number(sets);
+        exercise.reps = Number(reps);
+        exercise.weightLifted = Number(weightLifted);
+    } else {
+        // Optionally clear out the gym-specific fields if changing to a different type
+        exercise.subCategory = null;
+        exercise.sets = null;
+        exercise.reps = null;
+        exercise.weightLifted = null;
+    }
   
       await exercise.save();
       res.json({ message: 'Exercise updated!', exercise });
