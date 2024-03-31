@@ -1,7 +1,7 @@
 import Header from '../components/Header'
 import HomepageGrid from '../components/HomepageGrid'
 import GymTutorials from '../components/GymTutorials'
-import RouteCreation from '../components/RouteCreation'
+import CreateRoutine from '../components/CreateRoutine'
 
 const HomePage = () => {
   return (
@@ -9,7 +9,7 @@ const HomePage = () => {
       <Header />
       <HomepageGrid />
       <GymTutorials />
-      <RouteCreation />
+      <CreateRoutinev />
     </>
   )
 }
