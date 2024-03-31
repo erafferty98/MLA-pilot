@@ -6,8 +6,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.authservice.auth.config.SecurityConfig;
 
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class SecurityConfigTest {
@@ -24,15 +28,23 @@ class SecurityConfigTest {
     @Test
     void testFilterChain() throws Exception {
         SecurityConfig securityConfig = new SecurityConfig();
-        HttpSecurity httpSecurity = mock(HttpSecurity.class);
+        String RETURNS_DEEP_STUBS;
+        HttpSecurity httpSecurity = mock(HttpSecurity.class, RETURNS_DEEP_STUBS); // Use RETURNS_DEEP_STUBS for chaining
+
+        when(httpSecurity.cors().and()).thenReturn(httpSecurity);
+        when(httpSecurity.csrf().disable()).thenReturn(httpSecurity);
+        when(httpSecurity.authorizeRequests()).thenReturn(httpSecurity);
+        when(httpSecurity.httpBasic()).thenReturn(httpSecurity);
+        when(httpSecurity.sessionManagement()).thenReturn(httpSecurity);
 
         securityConfig.filterChain(httpSecurity);
 
-        verify(httpSecurity).cors();
-        verify(httpSecurity).csrf();
-        verify(httpSecurity).authorizeRequests();
+        // Verify interactions with mocked HttpSecurity object
+        verify(httpSecurity).cors().and();
+        verify(httpSecurity).csrf().disable();
+        verify(httpSecurity).authorizeRequests().anyRequest().authenticated();
         verify(httpSecurity).httpBasic();
-        verify(httpSecurity).sessionManagement();
-        // Note: build() is not a method directly invoked on httpSecurity but a result of the configuration chain.
+        verify(httpSecurity, atLeastOnce()).sessionManagement(); // Verifying it's called at least once
     }
 }
+    
