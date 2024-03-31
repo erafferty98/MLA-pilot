@@ -1,47 +1,73 @@
 package com.authservice.auth;
 
-import org.junit.jupiter.api.Assertions;
+import com.authservice.auth.dto.UserRegistrationDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.authservice.auth.dto.UserRegistrationDto;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.Set;
+import javax.validation.ConstraintViolation;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserRegistrationDtoTest {
 
-    @Test
-    public void testGetUsername() {
-        String username = "test@example.com";
-        UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
-        userRegistrationDto.setUsername(username);
-        Assertions.assertEquals(username, userRegistrationDto.getUsername());
+    private Validator validator;
+
+    @BeforeEach
+    public void setup() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
     }
 
     @Test
-    public void testGetPassword() {
+    void testGettersAndSetters() {
+        String username = "test@example.com";
         String password = "password123";
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
-        userRegistrationDto.setPassword(password);
-        Assertions.assertEquals(password, userRegistrationDto.getPassword());
-    }
 
-    @Test
-    public void testEmptyConstructor() {
-        UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
-        Assertions.assertNotNull(userRegistrationDto);
-    }
-
-    @Test
-    public void testSetUsername() {
-        String username = "test@example.com";
-        UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setUsername(username);
-        Assertions.assertEquals(username, userRegistrationDto.getUsername());
+        userRegistrationDto.setPassword(password);
+
+        assertEquals(username, userRegistrationDto.getUsername());
+        assertEquals(password, userRegistrationDto.getPassword());
     }
 
     @Test
-    public void testSetPassword() {
-        String password = "password123";
+    void testNotBlankUsername() {
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
-        userRegistrationDto.setPassword(password);
-        Assertions.assertEquals(password, userRegistrationDto.getPassword());
+        userRegistrationDto.setUsername(""); // Blank username
+
+        Set<ConstraintViolation<UserRegistrationDto>> violations = validator.validate(userRegistrationDto);
+        assertFalse(violations.isEmpty());
+    }
+
+    @Test
+    void testNotBlankPassword() {
+        UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
+        userRegistrationDto.setPassword(""); // Blank password
+
+        Set<ConstraintViolation<UserRegistrationDto>> violations = validator.validate(userRegistrationDto);
+        assertFalse(violations.isEmpty());
+    }
+
+    @Test
+    void testValidEmailUsername() {
+        UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
+        userRegistrationDto.setUsername("invalid-email");
+
+        Set<ConstraintViolation<UserRegistrationDto>> violations = validator.validate(userRegistrationDto);
+        assertFalse(violations.isEmpty()); // Expect validation errors due to invalid email format
+    }
+
+    @Test
+    void testMinimumPasswordLength() {
+        UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
+        userRegistrationDto.setPassword("short");
+
+        Set<ConstraintViolation<UserRegistrationDto>> violations = validator.validate(userRegistrationDto);
+        assertFalse(violations.isEmpty()); // Expect validation errors due to short password length
     }
 }

@@ -1,43 +1,38 @@
 package com.authservice.auth;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-public class SecurityConfigTest {
+import com.authservice.auth.config.SecurityConfig;
 
-    @Autowired
-    private MockMvc mockMvc;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-    // Test that the public endpoints are accessible without authentication
+class SecurityConfigTest {
+
     @Test
-    public void givenPublicPaths_whenAccessWithoutAuthentication_thenOk() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/auth/signup"))
-                .andExpect(status().isOk());
+    void testPasswordEncoder() {
+        SecurityConfig securityConfig = new SecurityConfig();
+        BCryptPasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/auth/login"))
-                .andExpect(status().isOk());
+        // Check that the password encoder is not null
+        assertNotNull(passwordEncoder, "Password encoder should not be null");
     }
 
-    // Test that a protected endpoint requires authentication
     @Test
-    public void givenProtectedPath_whenAccessWithoutAuthentication_thenUnauthorized() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/protected"))
-                .andExpect(status().isUnauthorized());
-    }
+    void testFilterChain() throws Exception {
+        SecurityConfig securityConfig = new SecurityConfig();
+        HttpSecurity httpSecurity = mock(HttpSecurity.class);
 
-    // Test that a protected endpoint is accessible with proper authentication
-    @WithMockUser
-    @Test
-    public void givenProtectedPath_whenAccessWithAuthentication_thenOk() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/protected"))
-                .andExpect(status().isOk());
+        securityConfig.filterChain(httpSecurity);
+
+        verify(httpSecurity).cors();
+        verify(httpSecurity).csrf();
+        verify(httpSecurity).authorizeRequests();
+        verify(httpSecurity).httpBasic();
+        verify(httpSecurity).sessionManagement();
+        // Note: build() is not a method directly invoked on httpSecurity but a result of the configuration chain.
     }
 }

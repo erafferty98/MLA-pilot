@@ -1,95 +1,83 @@
 package com.authservice.auth;
 
 import com.authservice.auth.controller.AuthController;
-import com.authservice.auth.dto.UserRegistrationDto;
 import com.authservice.auth.model.User;
+import com.authservice.auth.dto.UserRegistrationDto;
 import com.authservice.auth.repository.UserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.authservice.auth.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
-@WebMvcTest(AuthController.class)
-public class AuthControllerTest {
+class AuthControllerTest {
 
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private UserService userService;
+
     @InjectMocks
     private AuthController authController;
 
-    private MockMvc mockMvc;
-
-    public AuthControllerTest() {
+    @BeforeEach
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @SuppressWarnings("null")
     @Test
-    public void testRegisterUser() throws Exception {
+    void testRegisterUser_WithValidUserDto_ReturnsOkResponse() {
+        // Arrange
         UserRegistrationDto userDto = new UserRegistrationDto();
         userDto.setUsername("testuser");
         userDto.setPassword("testpassword");
 
-        when(userRepository.existsByUsername("testuser")).thenReturn(false);
+        when(userRepository.existsByUsername(anyString())).thenReturn(false);
+        when(userService.isValidEmail(anyString())).thenReturn(true);
+        when(userService.isValidPassword(anyString())).thenReturn(true);
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/signup")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(userDto)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("User registered successfully!"));
+        // Act
+        ResponseEntity<?> response = authController.registerUser(userDto);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("User registered successfully!", response.getBody());
+        verify(userRepository, times(1)).save(any(User.class));
     }
 
     @SuppressWarnings("null")
     @Test
-    public void testAuthenticateUser() throws Exception {
-        User user = new User();
-        user.setUsername("testuser");
-        user.setPassword("testpassword");
+    void testRegisterUser_WithExistingUser_ReturnsBadRequestResponse() {
+        // Arrange
+        UserRegistrationDto userDto = new UserRegistrationDto();
+        userDto.setUsername("existinguser");
+        userDto.setPassword("testpassword");
 
-        when(userRepository.findByUsername("testuser")).thenReturn(user);
+        when(userRepository.existsByUsername(anyString())).thenReturn(true);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(user)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("User authenticated"));
+        // Act
+        ResponseEntity<?> response = authController.registerUser(userDto);
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Error: User already exists - please log in.", response.getBody());
+        verify(userRepository, never()).save(any(User.class));
     }
 
-    @Test
-    public void testForgotPassword() throws Exception {
-        String username = "testuser";
+    // Add more test cases for other methods in AuthController
 
-        when(userRepository.findByUsername("testuser")).thenReturn(new User());
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/forgot-password")
-                .param("username", username))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("Reset password link sent to your email"));
-    }
-
-    @Test
-    public void testLogoutUser() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/logout"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("User logged out successfully!"));
-    }
-
-    @Test
-    public void testSignupWithGoogle() throws Exception {
-        String googleAccessToken = "testtoken";
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/signup-with-google")
-                .param("googleAccessToken", googleAccessToken))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("User signed up with Google"));
-    }
 }

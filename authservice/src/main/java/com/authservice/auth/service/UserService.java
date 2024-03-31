@@ -10,6 +10,10 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+/**
+ * The UserService class provides methods for user-related operations such as email validation,
+ * password validation, and processing OAuth2 user details.
+ */
 @Service
 public class UserService {
 
@@ -18,6 +22,11 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository2, PasswordEncoder passwordEncoder2) {
+        this.userRepository = userRepository2;
+        this.passwordEncoder = passwordEncoder2;
+    }
 
     public boolean isValidEmail(String email) {
         try {
