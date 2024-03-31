@@ -10,6 +10,7 @@ import Image from 'next/image'
 import { Modal, Button } from '@mantine/core'
 import { clearCurrentUser } from '../../utils/sessionStorage'
 import AddExerciseModal, { AddExercieModalTitle } from '../AddExerciseModal'
+import GymTutorials from '../GymTutorials'
 
 const Header = () => {
   const router = useRouter()
@@ -28,6 +29,11 @@ const Header = () => {
     openModal()
     closeDrawer()
   }
+  // Function to navigate to the Gym Tutorials page
+  const navigateToGymTutorials = () => {
+    router.push('/GymTutorials'); 
+    closeDrawer();
+  };
 
   return (
     <>
@@ -57,6 +63,10 @@ const Header = () => {
               <Button onClick={() => logout()} className={classes.headerButton}>
                 <IconLogout className={classes.headerButtonIcon} />
                 Logout
+              </Button>
+              <Button onClick={navigateToGymTutorials} className={classes.headerButton}>
+                <IconSquarePlus className={classes.headerButtonIcon} />
+                Gym Tutorials
               </Button>
             </>
           </Group>

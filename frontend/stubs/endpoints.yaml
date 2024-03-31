@@ -35,6 +35,15 @@
       body: 'User registered successfully!'
 
 - request:
+    url: ^/api/auth/forgot-password$
+    method: POST
+    json: '{ "email": "test@example.com" }'
+  response:
+    - status: 200
+      latency: 1000
+      body: 'Password reset email sent'
+
+- request:
     url: ^/exercises/add$
     method: POST
   response:

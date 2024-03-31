@@ -3,6 +3,8 @@ import { Container, Grid, SimpleGrid, rem } from '@mantine/core'
 import Journal from '../Journal'
 import Progress from '../Progress'
 import WeeklyGoal from '../WeeklyGoal'
+import GymTutorials from '../GymTutorials'
+import CreateRoutine from '../CreateRoutine'
 
 const PRIMARY_COL_HEIGHT = rem(600)
 

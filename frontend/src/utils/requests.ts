@@ -52,6 +52,26 @@ export const signupRequest = async (data: authData) => {
   }
 }
 
+export const forgotPasswordRequest = async (data: authData) => {
+  try {
+    const response = await axios.post('http://localhost:3000/api/forgot-password', {
+      username: data.username,
+    });
+
+    if (response.status === 200) {
+      return { success: true };
+    } else {
+      return { success: false, error: 'Invalid username' };
+    }
+  } catch (err) {
+    console.log(err);
+    return {
+      success: false,
+      error: "Looks like there's an issue on our end. Please try again.",
+    };
+  }
+};
+
 export const addExercise = async (data: ExerciseFormReqType) => {
   const url = 'http://localhost:3000/api/add-exercise'
   try {
