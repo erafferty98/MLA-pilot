@@ -7,5 +7,15 @@ rep_to_percentage = {
 }
 
 def calculate_1rm(reps, weight):
+    """
+    Calculates the one-rep max (1RM) based on the number of reps and weight lifted.
+
+    Args:
+        reps (int): The number of reps performed.
+        weight (float): The weight lifted.
+
+    Returns:
+        float: The estimated one-rep max (1RM) based on the given reps and weight.
+    """
     percentage = rep_to_percentage.get(reps, 100) / 100.0  # Default to 100% if reps not in map
     return weight / percentage
