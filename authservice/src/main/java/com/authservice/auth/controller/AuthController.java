@@ -1,23 +1,21 @@
 package com.authservice.auth.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.authservice.auth.model.User;
-import com.authservice.auth.dto.UserRegistrationDto;
 import com.authservice.auth.repository.UserRepository;
-import com.authservice.auth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.validation.annotation.Validated;
 import java.util.UUID;
 
+/**
+ * The AuthController class handles the authentication and authorization endpoints for the application.
+ * It provides methods for user registration, user login, user logout, and other authentication-related operations.
+ */
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/api/auth")
 public class AuthController {
-    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -25,35 +23,14 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserService userService;
-
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody @Validated UserRegistrationDto userDto) {
-        logger.info("Attempting to register user: {}", userDto.getUsername());
-
-        if (userRepository.existsByUsername(userDto.getUsername())) {
-            logger.warn("Registration attempt failed - User already exists: {}", userDto.getUsername());
-            return ResponseEntity.badRequest().body("Error: User already exists - please log in.");
+    public ResponseEntity<?> registerUser(@RequestBody User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            return ResponseEntity.badRequest().body("User already exists - please log in");
         }
 
-        if (!userService.isValidEmail(userDto.getUsername())) {
-            logger.warn("Registration attempt failed - Invalid email address: {}", userDto.getUsername());
-            return ResponseEntity.badRequest().body("Error: Invalid email address.");
-        }
-
-        if (!userService.isValidPassword(userDto.getPassword())) {
-            logger.warn("Registration attempt failed - Password does not meet strength requirements.");
-            return ResponseEntity.badRequest().body("Error: Password does not meet strength requirements.");
-        }
-
-        // User creation and saving logic remains the same
-        User user = new User();
-        user.setUsername(userDto.getUsername());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-        
-        logger.info("User registered successfully: {}", userDto.getUsername());
         return ResponseEntity.ok("User registered successfully!");
     }
 
@@ -62,10 +39,22 @@ public class AuthController {
         User existingUser = userRepository.findByUsername(user.getUsername());
 
         if (existingUser != null && passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
-            return ResponseEntity.ok("User authenticated.");
+            return ResponseEntity.ok("User authenticated");
         } else {
-            return ResponseEntity.status(401).body("Error: Invalid credentials.");
+            return ResponseEntity.status(401).body("Invalid credentials");
         }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logoutUser() {
+        // This endpoint might be handled differently depending on your session management strategy
+        return ResponseEntity.ok("User logged out successfully.");
+    }
+
+    @PostMapping("/signup-with-google")
+    public ResponseEntity<?> signupWithGoogle(@RequestParam String googleAccessToken) {
+        // This method assumes that Google sign-up/authentication logic is handled elsewhere
+        return ResponseEntity.status(501).body("Google sign-up not implemented.");
     }
 
     @PostMapping("/forgot-password")
@@ -88,17 +77,5 @@ public class AuthController {
     private void sendResetPasswordEmail(String email, String resetToken) {
         // Code to send reset password email
         System.out.println("Sending reset password email to: " + email + " with token: " + resetToken);
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<?> logoutUser() {
-        // This endpoint might be handled differently depending on your session management strategy
-        return ResponseEntity.ok("User logged out successfully.");
-    }
-
-    @PostMapping("/signup-with-google")
-    public ResponseEntity<?> signupWithGoogle(@RequestParam String googleAccessToken) {
-        // This method assumes that Google sign-up/authentication logic is handled elsewhere
-        return ResponseEntity.status(501).body("Google sign-up not implemented.");
     }
 }
