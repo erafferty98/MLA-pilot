@@ -1,4 +1,5 @@
 'use client'
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Box,
   Grid,
@@ -12,54 +13,68 @@ import {
   ActionIcon,
   Modal,
   NumberInput,
-} from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
-import { useState, useEffect, useContext } from 'react'
-import { IconInfoCircle, IconEdit, IconCheck } from '@tabler/icons-react'
-import moment from 'moment'
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { IconInfoCircle, IconEdit, IconCheck } from '@tabler/icons-react';
+import moment from 'moment';
 
-import { getCurrentUser } from '../../utils/sessionStorage'
-import { UpdateContext } from '../../context/UpdateContextProvider'
-import classes from './WeeklyGoal.module.css'
-import { fetchExercises } from '../../utils/requests'
-import Spinner from '../Spinner'
-import formatData from './formatData'
+import { getCurrentUser } from '../../utils/sessionStorage';
+import { UpdateContext } from '../../context/UpdateContextProvider';
+import classes from './WeeklyGoal.module.css';
+import { fetchExercises } from '../../utils/requests';
+import Spinner from '../Spinner';
+import formatData from './formatData';
 
 const WeeklyGoal = ({ height }) => {
   const [value, setValue] = useState<[Date | null, Date | null]>([
     moment().startOf('week').toDate(),
     moment().endOf('week').toDate(),
-  ])
-  const [data, setData] = useState([])
-  const [formattedData, setFormattedData] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
-  const [weeklyGoal, setWeeklyGoal] = useState<string | number>(200)
-  const { update } = useContext(UpdateContext)
-  const [opened, { open, close }] = useDisclosure(false)
+  ]);
+  const [data, setData] = useState<{ color: string; exerciseType: string; value: number }[]>([]);
+  const [formattedData, setFormattedData] = useState<{ color: string; exerciseType: string; value: number }[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [weeklyGoal, setWeeklyGoal] = useState<string | number>(200);
+  const { update } = useContext(UpdateContext);
+  const [opened, { open, close }] = useDisclosure(false);
 
   useEffect(() => {
-    setFormattedData(formatData(data, weeklyGoal))
-  }, [data, weeklyGoal])
-
+    const formattedData = formatData(data, weeklyGoal);
+    setFormattedData(formattedData);
+  }, [data, weeklyGoal]);
+  
   useEffect(() => {
-    if (getCurrentUser != null) {
-      setLoading(true)
-      setError(false)
-      fetchExercises(value[0], value[1], getCurrentUser()).then((data) => {
-        if (data === undefined) {
-          setData([])
-          setError(true)
-        } else {
-          setData(data)
-        }
-        setLoading(false)
-      })
+    const startDate = value[0];
+    const endDate = value[1];
+    const currentUser = getCurrentUser();
+  
+    // Define a boolean variable to check if all necessary values are present
+    const shouldFetchData = currentUser != null && startDate != null && endDate != null;
+  
+    if (shouldFetchData) {
+      setLoading(true);
+      setError(false);
+      fetchExercises(startDate, endDate, currentUser)
+        .then((data) => {
+          if (data === undefined) {
+            setData([]);
+            setError(true);
+          } else {
+            setData(data);
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching exercises:', error);
+          setError(true);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
-  }, [value, getCurrentUser(), update])
+  }, [value, getCurrentUser(), update]);  
 
   const Labels =
-    formattedData.length != 0 ? (
+    formattedData.length !== 0 ? (
       formattedData.map((item, index) => (
         <Flex direction="row" align="center" mb={'1rem'} key={index}>
           <span
@@ -81,7 +96,7 @@ const WeeklyGoal = ({ height }) => {
           No exercises recorded
         </Text>
       </Flex>
-    )
+    );
 
   return (
     <>
@@ -136,9 +151,9 @@ const WeeklyGoal = ({ height }) => {
                 w={'100%'}
                 h={'100%'}
               >
-                {formattedData
-                  .reduce((acc, item) => acc + item.value, 0)
-                  .toFixed(0) > 100 ? (
+              {parseInt(formattedData
+                .reduce((acc, item) => acc + item.value, 0)
+                .toFixed(0)) > 100 ? (
                   <RingProgress
                     sections={[{ value: 100, color: 'teal' }]}
                     label={
@@ -204,7 +219,7 @@ const WeeklyGoal = ({ height }) => {
         )}
       </Box>
     </>
-  )
-}
+  );
+};
 
-export default WeeklyGoal
+export default WeeklyGoal;

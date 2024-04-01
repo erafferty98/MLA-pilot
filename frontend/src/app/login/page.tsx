@@ -1,3 +1,4 @@
+'use client'
 import {
   Anchor,
   Paper,
@@ -38,7 +39,7 @@ const loginPage = () => {
               dataQaIdPrefix="logIn"
             />
             <Text c="dimmed" size="sm" ta="center" pt="20px">
-              Don't have an account yet?{' '}
+              Don&apos;t have an account yet?{' '}
               <Anchor size="sm" href="/signup" c="#FD6580">
                 Sign Up Here
               </Anchor>

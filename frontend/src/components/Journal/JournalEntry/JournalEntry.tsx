@@ -21,7 +21,7 @@ const JournalEntry = ({ entry }: { entry: JournalEntryType }) => {
       <Grid>
         <Grid.Col span={4}>
           <Flex align="center" justify="center" h={'100%'}>
-            <exercise.icon />
+            {exercise && <exercise.icon />}
           </Flex>
         </Grid.Col>
         <Grid.Col span={4}>

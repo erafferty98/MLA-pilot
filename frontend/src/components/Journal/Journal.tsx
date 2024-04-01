@@ -1,4 +1,5 @@
 'use client'
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Box,
   Grid,
@@ -8,70 +9,85 @@ import {
   Group,
   ActionIcon,
   Alert,
-} from '@mantine/core'
-import { useState, useEffect, useContext } from 'react'
+} from '@mantine/core';
 import {
   IconArrowLeft,
   IconArrowRight,
   IconInfoCircle,
-} from '@tabler/icons-react'
-
-import { UpdateContext } from '../../context/UpdateContextProvider'
-import DateSelect from '../DateSelect'
-import classes from './Journal.module.css'
-import { fetchExercises } from '../../utils/requests'
-import JournalEntry, { EmptyJournalEntry } from './JournalEntry'
-import Spinner from '../Spinner'
-import moment from 'moment'
-import { getCurrentUser } from '../../utils/sessionStorage'
+} from '@tabler/icons-react';
+import moment from 'moment';
+import { UpdateContext } from '../../context/UpdateContextProvider';
+import DateSelect from '../DateSelect';
+import classes from './Journal.module.css';
+import { fetchExercises } from '../../utils/requests';
+import JournalEntry, { EmptyJournalEntry } from './JournalEntry';
+import Spinner from '../Spinner';
+import { getCurrentUser } from '../../utils/sessionStorage';
 
 const Journal = ({ height }) => {
-  const defaultDateValue = new Date()
-  defaultDateValue.setDate(defaultDateValue.getDate() - 7)
+  const defaultDateValue = new Date();
+  defaultDateValue.setDate(defaultDateValue.getDate() - 7);
   const [value, setValue] = useState<[Date | null, Date | null]>([
     moment().subtract(7, 'days').toDate(),
     new Date(),
-  ])
-  const [data, setData] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
-  const { update } = useContext(UpdateContext)
-  const incrementDate = () => {
-    const newStartDate = moment(value[0]).add(7, 'days').toDate()
-    const newEndDate = moment(newStartDate).add(7, 'days').toDate()
-    setValue([newStartDate, newEndDate])
-  }
-  const decrementDate = () => {
-    const newStartDate = moment(value[0]).subtract(7, 'days').toDate()
-    const newEndDate = moment(newStartDate).add(7, 'days').toDate()
-    setValue([newStartDate, newEndDate])
-  }
+  ]);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const { update } = useContext(UpdateContext);
 
+  const incrementDate = () => {
+    const newStartDate = moment(value[0]).add(7, 'days').toDate();
+    const newEndDate = moment(newStartDate).add(7, 'days').toDate();
+    setValue([newStartDate, newEndDate]);
+  };
+
+  const decrementDate = () => {
+    const newStartDate = moment(value[0]).subtract(7, 'days').toDate();
+    const newEndDate = moment(newStartDate).add(7, 'days').toDate();
+    setValue([newStartDate, newEndDate]);
+  };
+
+  useEffect(() => {
+    const startDate = value[0];
+    const endDate = value[1];
+    const currentUser = getCurrentUser();
+  
+    // Define a boolean variable to check if all necessary values are present
+    const shouldFetchData = startDate != null && endDate != null && currentUser != null;
+  
+    if (shouldFetchData) {
+      setLoading(true);
+      setError(false);
+  
+      // Fetch exercises only if all required values are present
+      fetchExercises(startDate, endDate, currentUser)
+        .then((data) => {
+          if (data === undefined) {
+            setData([]);
+            setError(true);
+          } else {
+            setData(data);
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching exercises:', error);
+          setError(true);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [value, getCurrentUser(), update]);
+  
   const JournalEntries =
-    data.length != 0 ? (
+    data.length !== 0 ? (
       data.map((item, index) => {
-        return <JournalEntry entry={item} />
+        return <JournalEntry key={index} entry={item} />;
       })
     ) : (
       <EmptyJournalEntry />
-    )
-
-  useEffect(() => {
-    if (value[1] != null && getCurrentUser() != null) {
-      // date picker sets 2 values (start and end date) so we need to check if the end date is not null before making the req
-      setLoading(true)
-      setError(false)
-      fetchExercises(value[0], value[1], getCurrentUser()).then((data) => {
-        if (data === undefined) {
-          setData([])
-          setError(true)
-        } else {
-          setData(data)
-        }
-        setLoading(false)
-      })
-    }
-  }, [value, getCurrentUser(), update])
+    );
 
   return (
     <Box className={classes.container} h={height}>
@@ -122,7 +138,7 @@ const Journal = ({ height }) => {
         </ActionIcon>
       </Group>
     </Box>
-  )
-}
+  );
+};
 
-export default Journal
+export default Journal;

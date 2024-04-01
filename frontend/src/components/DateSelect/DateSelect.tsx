@@ -19,6 +19,7 @@ const DateSelect = ({ value, setValue }: DateSelectProps) => {
       setInternalValue(val)
       close()
     }
+
   }
   return (
     <>
@@ -41,7 +42,7 @@ const DateSelect = ({ value, setValue }: DateSelectProps) => {
           <IconCalendarWeek size={24} />
 
           <Text fw={600} w={'fit-content'}>
-            {value[1] &&
+            {value[0] && value[1] &&
               `${value[0].getDate()}/${value[0].getMonth() + 1} - ${value[1].getDate()}/${value[1].getMonth() + 1}`}
           </Text>
         </Flex>

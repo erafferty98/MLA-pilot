@@ -1,8 +1,8 @@
-import { Box, Flex, Grid, Progress, Text, px } from '@mantine/core'
-import { IconInfoCircle } from '@tabler/icons-react'
+import { Box, Flex, Grid, Progress, Text } from '@mantine/core';
+import { IconInfoCircle } from '@tabler/icons-react';
 
-import { exercises } from '../../../utils/exercises'
-import classes from './ProgressBar.module.css'
+import { exercises } from '../../../utils/exercises';
+import classes from './ProgressBar.module.css';
 
 export const EmptyProgressBar = () => {
   return (
@@ -14,17 +14,21 @@ export const EmptyProgressBar = () => {
         </Text>
       </Flex>
     </Box>
-  )
-}
+  );
+};
 
 const ProgressBar = ({ entry, max, index }) => {
-  const exercise = exercises.find((item) => item.label === entry.exerciseType)
+  const exercise = exercises.find((item) => item.label === entry.exerciseType);
+  
+  // Check if exercise exists before using its properties
+  if (!exercise) return null;
+  
   return (
     <Box className={classes.container} key={`progress-${index}`}>
       <Grid>
         <Grid.Col span={4}>
           <Flex align="center" justify="center" h={'100%'}>
-            {<exercise.icon color="white" size={'32px'} />}
+            {exercise.icon && <exercise.icon color="white" size={'32px'} />}
           </Flex>
         </Grid.Col>
         <Grid.Col span={4}>
@@ -44,7 +48,7 @@ const ProgressBar = ({ entry, max, index }) => {
         </Grid.Col>
       </Grid>
     </Box>
-  )
-}
+  );
+};
 
-export default ProgressBar
+export default ProgressBar;
