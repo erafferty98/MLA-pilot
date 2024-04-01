@@ -1,22 +1,22 @@
 package com.authservice.auth;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
-import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
-import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
-import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
+// import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+// import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
+// import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+// import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
+// import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
+// import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.authservice.auth.config.SecurityConfig;
 
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+// import static org.mockito.Mockito.atLeastOnce;
+// import static org.mockito.Mockito.doNothing;
+// import static org.mockito.Mockito.mock;
+// import static org.mockito.Mockito.spy;
+// import static org.mockito.Mockito.verify;
+// import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class SecurityConfigTest {
