@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const GymTutorials = () => {
-  const [videos, setVideos] = useState([
+  const videos = [
     {
       id: 1,
       title: 'Bench Press',
@@ -32,7 +32,7 @@ const GymTutorials = () => {
       description: 'Explore the fundamentals of the bent over row for strengthening your back with this guide.',
       videoUrl: 'https://www.youtube.com/shorts/Nqh7q3zDCoQ',
     }
-  ]);
+  ];
 
   return (
     <div>

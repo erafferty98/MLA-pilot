@@ -9,7 +9,7 @@ const HomePage = () => {
       <Header />
       <HomepageGrid />
       <GymTutorials />
-      <CreateRoutinev />
+      <CreateRoutine />
     </>
   )
 }

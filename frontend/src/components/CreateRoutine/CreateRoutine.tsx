@@ -1,55 +1,58 @@
-import { useState } from 'react';
-import { Modal, Textarea, Button, Group, Text, Box } from '@mantine/core';
-import { IconSend } from '@tabler/icons-react';
+import axios from 'axios';
+import React, { useState } from 'react';
 
-// Interface for ChatMessage with type annotations
-interface ChatMessage {
-  sender: 'user' | 'bot';
-  text: string;
-}
+const Chatbot = () => {
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [messages, setMessages] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState('');
 
-// Interface for CreateRoutineProps with type annotations
-interface CreateRoutineProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+  const sendMessage = async (message: string) => {
+    if (!message) return;
 
-const CreateRoutine: React.FC<CreateRoutineProps> = ({ isOpen, onClose }) => {
-  const [userInput, setUserInput] = useState<string>('');
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+    setMessages(messages => [...messages, `You: ${message}`]);
+    setInputValue('');
 
-  const sendMessage = () => {
-    if (!userInput.trim()) return;
+    try {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_PATH}/chatbot`, {
+        message
+      });
 
-    setMessages((currentMessages: ChatMessage[]) => [...currentMessages, { sender: 'user', text: userInput }]);
-    setUserInput('');
-
-    // Simulate a response from the backend after processing with OpenAI
-    setTimeout(() => {
-      setMessages((currentMessages: ChatMessage[]) => [...currentMessages, { sender: 'bot', text: 'Here is your personalized workout routine...' }]);
-    }, 1000);
+      setMessages(messages => [...messages, `Bot: ${response.data.reply}`]);
+    } catch (error) {
+      console.error('Error sending message to backend:', error);
+      setMessages(messages => [...messages, `Bot: I'm sorry, there was an error processing your request.`]);
+    }
   };
 
   return (
-    <Modal opened={isOpen} onClose={onClose} title="Workout Routine Assistant" size="lg">
-      <Box sx={{ maxHeight: 300, overflowY: 'auto' }}> {/* Using sx prop for styles */}
-        {messages.map((message: ChatMessage, index: number) => ( // Type annotations for map function variables
-          <Group key={index} position={message.sender === 'user' ? 'right' : 'left'}>
-            <Text>{message.text}</Text>
-          </Group>
-        ))}
-      </Box>
-      <Textarea
-        placeholder="Ask me for a workout routine..."
-        value={userInput}
-        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setUserInput(e.currentTarget.value)}
-        mt="md"
-      />
-      <Button rightIcon={<IconSend size={16} />} mt="md" onClick={sendMessage}>
-        Send
-      </Button>
-    </Modal>
+    <div className="chatbot-container">
+      {!isMinimized ? (
+        <div>
+          <div className="chatbot-header">
+            <span>Your Chatbot</span>
+            <button onClick={() => setIsMinimized(true)}>Minimize</button>
+          </div>
+          <div className="chatbot-messages" id="chat-messages">
+            {messages.map((msg, index) => (
+              <div key={index}>{msg}</div>
+            ))}
+          </div>
+          <div className="chatbot-input-area">
+            <input
+              className="chatbot-input"
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && sendMessage(inputValue)}
+            />
+            <button className="chatbot-button" onClick={() => sendMessage(inputValue)}>Send</button>
+          </div>
+        </div>
+      ) : (
+        <button onClick={() => setIsMinimized(false)}>Open Chat</button>
+      )}
+    </div>
   );
 };
 
-export default CreateRoutine;
+export default Chatbot;
