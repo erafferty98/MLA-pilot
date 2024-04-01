@@ -1,11 +1,10 @@
 'use-client'
 import { Box } from '@mantine/core'
-import { ReactNode } from 'react'
 
 import classes from './layout.module.css'
 
-const Layout = ({ children }: { children: ReactNode }) => {
-  return <Box className={classes.container}>{children}</Box>
+const Layout = (props) => {
+  return <Box className={classes.container}>{props.children}</Box>
 }
 
 export default Layout
