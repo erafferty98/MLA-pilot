@@ -4,23 +4,31 @@ import {
   IconQuestionMark,
   IconRun,
   IconSwimming,
-} from '@tabler/icons-react'
+} from '@tabler/icons-react';
 
-export const exercises = [
+interface Exercise {
+  label: string;
+  icon: (props: any) => JSX.Element;
+  color: string;
+  types?: string[]; // Optional property for exercise types
+  subsections?: { label: string; icon: (props: any) => JSX.Element; color: string }[];
+}
+
+export const exercises: Exercise[] = [
+  { label: 'Cycling', icon: IconBike, color: '#40C057' },
   { 
     label: 'Gym', 
     icon: IconBarbell, 
     color: '#228BE6',
-    subsections: [
-      { label: 'Squat', icon: IconBarbell, color: '#228BE6' },
-      { label: 'Bench Press', icon: IconBarbell, color: '#228BE6' },
-      { label: 'Deadlift', icon: IconBarbell, color: '#228BE6' },
-      { label: 'Overhead Press', icon: IconBarbell, color: '#228BE6' },
-      { label: 'Bent Over Row', icon: IconBarbell, color: '#228BE6' },
-      { label: 'Other Weightlifting', icon: IconBarbell, color: '#228BE6' },
+    types: [ // Define exercise types for Gym
+      'Squat',
+      'Bench Press',
+      'Deadlift',
+      'Overhead Press',
+      'Bent Over Row',
+      'Other Weightlifting',
     ], 
   },
-  { label: 'Cycling', icon: IconBike, color: '#40C057' },
   { label: 'Running', icon: IconRun, color: '#7950F2' },
   { label: 'Swimming', icon: IconSwimming, color: '#D2F250' },
   { label: 'Other', icon: IconQuestionMark, color: '#F243EB' },

@@ -1,4 +1,3 @@
-'use client'
 import {
   Flex,
   Title,
@@ -7,36 +6,36 @@ import {
   Alert,
   NumberInput,
   rem,
-} from '@mantine/core'
-import { useState, useContext } from 'react'
-import { DatePickerInput } from '@mantine/dates'
-import { useForm, SubmitHandler, Controller } from 'react-hook-form'
-import { IconAlertCircle } from '@tabler/icons-react'
+} from '@mantine/core';
+import { useState, useContext } from 'react';
+import { DatePickerInput } from '@mantine/dates';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { IconAlertCircle } from '@tabler/icons-react';
 
-import Spinner from '../Spinner'
-import { getCurrentUser } from '../../utils/sessionStorage'
-import { exercises } from '../../utils/exercises'
-import { addExercise } from '../../utils/requests'
-import classes from './AddExerciseModal.module.css'
-import ExercisePicker from '../ExercisePicker/ExercisePicker'
-import { UpdateContext } from '../../context/UpdateContextProvider'
+import Spinner from '../Spinner';
+import { getCurrentUser } from '../../utils/sessionStorage';
+import { addExercise } from '../../utils/requests';
+import classes from './AddExerciseModal.module.css';
+import ExercisePicker from '../ExercisePicker/ExercisePicker';
+import { UpdateContext } from '../../context/UpdateContextProvider';
+import { exercises } from '../../utils/exercises';
 
 const errorIcon = (
   <IconAlertCircle style={{ width: rem(18), height: rem(18) }} stroke={2} />
-)
+);
 
 export const AddExercieModalTitle = () => {
   return (
     <Title order={2} className={classes.title}>
       Add Exercise
     </Title>
-  )
-}
+  );
+};
 
 const AddExerciseModal = ({ close }) => {
-  const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState(false)
-  const { forceUpdate } = useContext(UpdateContext)
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(false);
+  const { forceUpdate } = useContext(UpdateContext);
   const {
     register,
     handleSubmit,
@@ -50,27 +49,30 @@ const AddExerciseModal = ({ close }) => {
       exerciseType: exercises[0].label,
       exerciseSubcategory: '',
       exerciseDescription: '',
-      sets: 0, // Default value
-      reps: 0, // Default value
-      weightLifted: 0, // Default value
+      sets: 0,
+      reps: 0,
+      weightLifted: 0,
     },
-  })
+  });
 
   const onSubmit: SubmitHandler<ExerciseFormInputType> = async (data) => {
-    setError(false)
-    setSubmitting(true)
-    const response = await addExercise({ ...data, username: getCurrentUser() || ''})
+    setError(false);
+    setSubmitting(true);
+    const response = await addExercise({
+      ...data,
+      username: getCurrentUser() || '',
+    });
     if (response.success === true) {
-      setSubmitting(false)
-      forceUpdate()
-      close()
+      setSubmitting(false);
+      forceUpdate();
+      close();
     } else {
-      setSubmitting(false)
-      setError(true)
+      setSubmitting(false);
+      setError(true);
     }
-  }
+  };
 
-  const exerciseTypeWatch = watch("exerciseType");
+  const exerciseTypeWatch = watch('exerciseType');
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -103,7 +105,12 @@ const AddExerciseModal = ({ close }) => {
               name="exerciseSubcategory"
               control={control}
               render={({ field: { onChange, onBlur, value, ref } }) => (
-                <ExercisePicker {...register('exerciseType')} setValue={setValue} />
+                // Pass the gym types to the ExercisePicker for rendering
+                <ExercisePicker
+                  {...register('exerciseSubcategory')}
+                  setValue={setValue}
+                  exerciseTypes={exercises.find(ex => ex.label === 'Gym')?.types}
+                />
               )}
             />
             <Controller
@@ -111,7 +118,14 @@ const AddExerciseModal = ({ close }) => {
               control={control}
               rules={{ required: true, min: 1 }}
               render={({ field }) => (
-                <NumberInput {...field} label="Sets Count" min={1} error={errors.sets ? 'Invalid sets count' : false} pt={'1rem'} w={'100%'} />
+                <NumberInput
+                  {...field}
+                  label="Sets Count"
+                  min={1}
+                  error={errors.sets ? 'Invalid sets count' : false}
+                  pt={'1rem'}
+                  w={'100%'}
+                />
               )}
             />
             <Controller
@@ -119,7 +133,14 @@ const AddExerciseModal = ({ close }) => {
               control={control}
               rules={{ required: true, min: 1 }}
               render={({ field }) => (
-                <NumberInput {...field} label="Reps Count" min={1} error={errors.reps ? 'Invalid reps count' : false} pt={'1rem'} w={'100%'} />
+                <NumberInput
+                  {...field}
+                  label="Reps Count"
+                  min={1}
+                  error={errors.reps ? 'Invalid reps count' : false}
+                  pt={'1rem'}
+                  w={'100%'}
+                />
               )}
             />
             <Controller
@@ -127,7 +148,14 @@ const AddExerciseModal = ({ close }) => {
               control={control}
               rules={{ required: true, min: 0 }}
               render={({ field }) => (
-                <NumberInput {...field} label="Weight Lifted (kgs)" min={0} error={errors.weightLifted ? 'Invalid weight' : false} pt={'1rem'} w={'100%'} />
+                <NumberInput
+                  {...field}
+                  label="Weight Lifted (kgs)"
+                  min={0}
+                  error={errors.weightLifted ? 'Invalid weight' : false}
+                  pt={'1rem'}
+                  w={'100%'}
+                />
               )}
             />
           </>
@@ -186,7 +214,7 @@ const AddExerciseModal = ({ close }) => {
         {submitting ? <Spinner /> : 'Submit'}
       </Button>
     </form>
-  )
-}
+  );
+};
 
-export default AddExerciseModal
+export default AddExerciseModal;
