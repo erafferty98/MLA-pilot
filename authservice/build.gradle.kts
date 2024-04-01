@@ -26,6 +26,7 @@ dependencies {
 	implementation ("com.sun.mail:javax.mail:1.6.2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
+	testImplementation("org.mockito:mockito-core:3.+")
 }
 
 tasks.withType<Test> {
