@@ -1,5 +1,7 @@
 package com.authservice.auth.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.authservice.auth.model.User;
 import com.authservice.auth.dto.UserRegistrationDto;
 import com.authservice.auth.repository.UserRepository;
@@ -15,6 +17,7 @@ import java.util.UUID;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/api/auth")
 public class AuthController {
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -27,25 +30,30 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody @Validated UserRegistrationDto userDto) {
+        logger.info("Attempting to register user: {}", userDto.getUsername());
+
         if (userRepository.existsByUsername(userDto.getUsername())) {
+            logger.warn("Registration attempt failed - User already exists: {}", userDto.getUsername());
             return ResponseEntity.badRequest().body("Error: User already exists - please log in.");
         }
 
         if (!userService.isValidEmail(userDto.getUsername())) {
+            logger.warn("Registration attempt failed - Invalid email address: {}", userDto.getUsername());
             return ResponseEntity.badRequest().body("Error: Invalid email address.");
         }
-        
-        // Adding password strength validation
+
         if (!userService.isValidPassword(userDto.getPassword())) {
+            logger.warn("Registration attempt failed - Password does not meet strength requirements.");
             return ResponseEntity.badRequest().body("Error: Password does not meet strength requirements.");
         }
 
+        // User creation and saving logic remains the same
         User user = new User();
         user.setUsername(userDto.getUsername());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        // Set other properties from DTO as needed
-
         userRepository.save(user);
+        
+        logger.info("User registered successfully: {}", userDto.getUsername());
         return ResponseEntity.ok("User registered successfully!");
     }
 

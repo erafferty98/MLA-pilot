@@ -133,33 +133,32 @@ export const fetchStatistics = async (currentUser: string) => {
     }
   }
 
-  // New function to add or update chatbot preferences
-  export const saveChatbotPreferences = async (data: CreateRoutineType) => {
-    const url = 'http://localhost:3000/api/chatbot-preferences';
-    try {
-      const response = await axios.post(url, {
-        goal: data.goal,
-        fitness_level: data.fitness_level,
-        equipment_available: data.equipment_available,
-        limitations: data.limitations,
-        workout_duration: data.workout_duration,
-        user_workout_schedule: data.user_workout_schedule,
-        user_feedback: data.user_feedback,
-      });
+  // // New function to add or update chatbot preferences
+  // export const saveChatbotPreferences = async (data: CreateRoutineType) => {
+  //   const url = 'http://localhost:3000/api/chatbot-preferences';
+  //   try {
+  //     const response = await axios.post(url, {
+  //       goal: data.goal,
+  //       fitness_level: data.fitness_level,
+  //       equipment_available: data.equipment_available,
+  //       limitations: data.limitations,
+  //       workout_duration: data.workout_duration,
+  //       user_workout_schedule: data.user_workout_schedule,
+  //       user_feedback: data.user_feedback,
+  //     });
 
-      if (response.status === 200) {
-        return { success: true };
-      } else {
-        return {
-          success: false,
-          error: "There was an issue saving your preferences. Please try again.",
-        };
-      }
-    } catch (err) {
-      console.log(err);
-      return {
-        success: false,
-        error: "There was an issue saving your preferences. Please try again.",
-      };
-    }
-  }
+  //     if (response.status === 200) {
+  //       return { success: true };
+  //     } else {
+  //       return {
+  //         success: false,
+  //         error: "There was an issue saving your preferences. Please try again.",
+  //       };
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //     return {
+  //       success: false,
+  //       error: "There was an issue saving your preferences. Please try again.",
+  //     };
+  //   } }

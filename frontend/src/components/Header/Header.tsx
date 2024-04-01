@@ -20,6 +20,12 @@ const Header = () => {
     useDisclosure(false)
   const [cookies, setCookie, removeCookie] = useCookies(['authToken'])
 
+  // Function to navigate to the Gym Tutorials page
+  const navigateToGymTutorials = () => {
+    router.push('/GymTutorials');
+    closeDrawer();
+  };
+
   const logout = () => {
     clearCurrentUser()
     removeCookie('authToken')
@@ -29,11 +35,6 @@ const Header = () => {
     openModal()
     closeDrawer()
   }
-  // Function to navigate to the Gym Tutorials page
-  const navigateToGymTutorials = () => {
-    router.push('/GymTutorials'); 
-    closeDrawer();
-  };
 
   return (
     <>
@@ -59,14 +60,14 @@ const Header = () => {
                 <IconSquarePlus className={classes.headerButtonIcon} />
                 Add Exercise
               </Button>
+              <Button onClick={navigateToGymTutorials} className={classes.headerButton}>
+                <IconSquarePlus className={classes.headerButtonIcon} />
+                Gym Tutorials
+              </Button>
               <div className={classes.verticalDivider}></div>
               <Button onClick={() => logout()} className={classes.headerButton}>
                 <IconLogout className={classes.headerButtonIcon} />
                 Logout
-              </Button>
-              <Button onClick={navigateToGymTutorials} className={classes.headerButton}>
-                <IconSquarePlus className={classes.headerButtonIcon} />
-                Gym Tutorials
               </Button>
             </>
           </Group>

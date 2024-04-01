@@ -15,7 +15,6 @@ const ExercisePicker = ({ setValue, name }) => {
 
   const handleSubcategorySelect = (subcategory) => {
     setSelected(subcategory);
-    setValue(name, subcategory.label); // Call the setValue function with the selected value
     setOpened(false); // Close the dropdown after selecting a subcategory
   };
 
@@ -31,7 +30,7 @@ const ExercisePicker = ({ setValue, name }) => {
       ));
     }
     return null;
-  };
+  }; 
 
   const items = exercises.map((item) => (
     <Menu.Item

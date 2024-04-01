@@ -1,3 +1,4 @@
+'use client'
 import {
   Flex,
   Title,
@@ -32,17 +33,6 @@ export const AddExercieModalTitle = () => {
   )
 }
 
-type ExerciseFormInputType = {
-  exerciseDate: Date;
-  exerciseType: string;
-  exerciseSubcategory: string;
-  exerciseDescription: string;
-  sets: number;
-  reps: number;
-  weightLifted: number;
-  exerciseDuration: number;
-};
-
 const AddExerciseModal = ({ close }) => {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(false)
@@ -50,9 +40,9 @@ const AddExerciseModal = ({ close }) => {
   const {
     register,
     handleSubmit,
+    watch,
     control,
     setValue,
-    watch,
     formState: { errors },
   } = useForm<ExerciseFormInputType>({
     defaultValues: {
@@ -63,14 +53,13 @@ const AddExerciseModal = ({ close }) => {
       sets: 0, // Default value
       reps: 0, // Default value
       weightLifted: 0, // Default value
-      exerciseDuration: 0, // Default value
     },
   })
 
   const onSubmit: SubmitHandler<ExerciseFormInputType> = async (data) => {
     setError(false)
     setSubmitting(true)
-    const response = await addExercise({ ...data, username: getCurrentUser() })
+    const response = await addExercise({ ...data, username: getCurrentUser() || ''})
     if (response.success === true) {
       setSubmitting(false)
       forceUpdate()
@@ -109,8 +98,14 @@ const AddExerciseModal = ({ close }) => {
           )}
         />
         {exerciseTypeWatch === 'Gym' && (
-          // Conditional fields for Gym exercise type
           <>
+            <Controller
+              name="exerciseSubcategory"
+              control={control}
+              render={({ field: { onChange, onBlur, value, ref } }) => (
+                <ExercisePicker {...register('exerciseType')} setValue={setValue} />
+              )}
+            />
             <Controller
               name="sets"
               control={control}

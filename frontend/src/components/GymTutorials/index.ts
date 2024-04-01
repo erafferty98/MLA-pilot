@@ -1,3 +1,3 @@
-import GymTutorials from './GymTutorials'
+import GymTutorialsPage from './GymTutorials'
 
-export default GymTutorials
+export default GymTutorialsPage
