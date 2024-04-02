@@ -41,14 +41,15 @@
     "cy:run": "cypress run"
   },
   "eslintConfig": {
-    "extends": [
-      "eslint-config-next"
-    ]
+    "extends": ["eslint-config-next"]
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "eslint": "^8.57.0",
+    "eslint-config-next": "^14.1.4",
+    "eslint-plugin-react": "^7.34.1",
+    "mkdirp": "^3.0.1",
     "postcss": "^8.4.35",
     "postcss-preset-mantine": "^1.13.0",
     "postcss-simple-vars": "^7.0.1",

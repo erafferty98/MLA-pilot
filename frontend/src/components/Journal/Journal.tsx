@@ -47,14 +47,11 @@ const Journal = ({ height }) => {
     setValue([newStartDate, newEndDate])
   }
 
-  const JournalEntries =
-    data.length != 0 ? (
-      data.map((item, index) => {
-        return <JournalEntry entry={item} />
-      })
-    ) : (
-      <EmptyJournalEntry />
-    )
+  const JournalEntries = data.length !== 0 ? (
+    data.map((item, index) => <JournalEntry key={item.id || index} entry={item} />)
+  ) : (
+    <EmptyJournalEntry />
+  );
 
   useEffect(() => {
     if (value[1] != null && getCurrentUser() != null) {

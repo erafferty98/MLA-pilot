@@ -39,24 +39,22 @@ const WeeklyGoal = ({ height }) => {
   const [opened, { open, close }] = useDisclosure(false)
 
   useEffect(() => {
-    setFormattedData(formatData(data, weeklyGoal))
-  }, [data, weeklyGoal])
-
-  useEffect(() => {
-    if (getCurrentUser != null) {
-      setLoading(true)
-      setError(false)
-      fetchExercises(value[0], value[1], getCurrentUser()).then((data) => {
-        if (data === undefined) {
-          setData([])
-          setError(true)
+    const currentUser = getCurrentUser(); // Call outside useEffect
+    if (currentUser != null) {
+      setLoading(true);
+      setError(false);
+      fetchExercises(value[0], value[1], currentUser).then((fetchedData) => {
+        if (fetchedData === undefined) {
+          setData([]);
+          setError(true);
         } else {
-          setData(data)
+          setData(fetchedData);
         }
-        setLoading(false)
-      })
+        setLoading(false);
+      });
     }
-  }, [value, getCurrentUser(), update])
+  // Depend on the result of getCurrentUser, rather than the function itself
+  }, [value, update]); // Note: Removing getCurrentUser() from the dependencies  
 
   const Labels =
     formattedData.length != 0 ? (
