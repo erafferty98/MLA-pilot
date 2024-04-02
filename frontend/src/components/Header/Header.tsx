@@ -1,15 +1,16 @@
 'use client'
 
-import { useCookies } from 'react-cookie'
+import { useCookies } from 'react-cookie';
 import { Container, Group, Burger, Drawer } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { IconSquarePlus, IconLogout } from '@tabler/icons-react'
+import { IconSquarePlus, IconLogout, IconVideo } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import classes from './Header.module.css'
 import Image from 'next/image'
 import { Modal, Button } from '@mantine/core'
 import { clearCurrentUser } from '../../utils/sessionStorage'
 import AddExerciseModal, { AddExercieModalTitle } from '../AddExerciseModal'
+import GymTutorials from '../GymTutorials';
 
 const Header = () => {
   const router = useRouter()
@@ -18,6 +19,12 @@ const Header = () => {
   const [openedDrawer, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false)
   const [cookies, setCookie, removeCookie] = useCookies(['authToken'])
+
+  // Function to navigate to the Gym Tutorials page
+  const navigateToGymTutorials = () => {
+    router.push('/GymTutorials');
+    closeDrawer();
+  };
 
   const logout = () => {
     clearCurrentUser()
@@ -40,13 +47,15 @@ const Header = () => {
       </Modal>
       <header className={classes.header}>
         <Container size="md" className={classes.inner}>
-          <Image
-            width={40}
-            height={50}
-            src="/CFG_logo_inverted.png"
-            alt="CFG logo"
-            loading="lazy"
-          />
+          <a href="/" className={classes.logoLink}>
+            <Image
+              width={40}
+              height={50}
+              src="/CFG_logo_inverted.png"
+              alt="CFG logo"
+              loading="lazy"
+            />
+          </a>
           <Group gap={5} visibleFrom="xs">
             <>
               <Button onClick={openModal} className={classes.headerButton}>
@@ -88,6 +97,10 @@ const Header = () => {
               <Button onClick={addEventModal} className={classes.headerButton}>
                 <IconSquarePlus className={classes.headerButtonIcon} />
                 Add Exercise
+              </Button>
+              <Button onClick={navigateToGymTutorials} className={classes.headerButton}>
+                <IconVideo className={classes.headerButtonIcon} />
+                Gym Tutorials
               </Button>
               <hr className={classes.horizontalDivider}></hr>
               <Button onClick={() => logout()} className={classes.headerButton}>

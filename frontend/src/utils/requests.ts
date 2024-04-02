@@ -61,6 +61,10 @@ export const addExercise = async (data: ExerciseFormReqType) => {
       description: data.exerciseDescription,
       duration: data.exerciseDuration,
       date: data.exerciseDate,
+      exerciseSubcategory: data.exerciseSubcategory, // Including the optional exerciseSubcategory property
+      sets: data.sets, // Including the optional sets property
+      reps: data.reps, // Including the optional reps property
+      weightLifted: data.weightLifted, // Including the optional weightLifted property
     })
 
     if (response.status === 200) {
