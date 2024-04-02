@@ -1,8 +1,9 @@
 'use client'
 import { useCookies } from 'react-cookie';
+import { useState } from 'react'; // Import useState hook
 import { Container, Group, Burger, Drawer, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconSquarePlus, IconLogout, IconVideo } from '@tabler/icons-react';
+import { IconSquarePlus, IconLogout, IconVideo, IconMessageChatbot } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import classes from './Header.module.css';
 import Image from 'next/image';
@@ -10,12 +11,14 @@ import { Modal, Button } from '@mantine/core';
 import { clearCurrentUser } from '../../utils/sessionStorage';
 import AddExerciseModal, { AddExercieModalTitle } from '../AddExerciseModal';
 import GymTutorials from '../GymTutorials';
+import CreateRoutine from '../CreateRoutine'; // Import CreateRoutine component
 
 const Header = () => {
   const router = useRouter();
   const [openedModal, { open: openModal, close: closeModal }] = useDisclosure(false);
   const [openedDrawer, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
   const [cookies, setCookie, removeCookie] = useCookies(['authToken']);
+  const [openedChatModal, setOpenedChatModal] = useState(false);
 
   // Function to navigate to the Gym Tutorials page
   const navigateToGymTutorials = () => {
@@ -34,6 +37,14 @@ const Header = () => {
     closeDrawer();
   };
 
+  const openChatModal = () => {
+    setOpenedChatModal(true);
+  };
+
+  const closeChatModal = () => {
+    setOpenedChatModal(false);
+  };
+
   return (
     <>
       <Modal
@@ -43,18 +54,25 @@ const Header = () => {
       >
         <AddExerciseModal close={closeModal} />
       </Modal>
+      <Modal
+        opened={openedChatModal}
+        onClose={closeChatModal}
+        title="Create AI Workout Routine"
+      >
+        <CreateRoutine />
+      </Modal>
       <header className={classes.header}>
         <Container size="md" className={classes.inner}>
           <div className={classes.logoContainer}>
-          <a href="/" className={classes.logoLink}>
-            <Image
-              width={40}
-              height={50}
-              src="/CFG_logo_inverted.png"
-              alt="CFG logo"
-              loading="lazy"
-            />
-          </a>
+            <a href="/" className={classes.logoLink}>
+              <Image
+                width={40}
+                height={50}
+                src="/CFG_logo_inverted.png"
+                alt="CFG logo"
+                loading="lazy"
+              />
+            </a>
           </div>
           <Group gap={5} visibleFrom="xs">
             <>
@@ -65,6 +83,11 @@ const Header = () => {
               <Button onClick={navigateToGymTutorials} className={classes.headerButton}>
                 <IconVideo className={classes.headerButtonIcon} />
                 Gym Tutorials
+              </Button>
+              {/* Add the button to open the chat modal */}
+              <Button onClick={openChatModal} className={classes.headerButton}>
+              <IconMessageChatbot className={classes.headerButtonIcon} />
+                Open Chat
               </Button>
               <div className={classes.verticalDivider}></div>
               <Button onClick={() => logout()} className={classes.headerButton}>
@@ -101,6 +124,10 @@ const Header = () => {
               <Button onClick={addEventModal} className={classes.headerButton}>
                 <IconSquarePlus className={classes.headerButtonIcon} />
                 Add Exercise
+              </Button>
+              <Button onClick={openChatModal} className={classes.headerButton}>
+                <IconMessageChatbot className={classes.headerButtonIcon} /> {/* Icon for opening chat */}
+                Open Chat
               </Button>
               <hr className={classes.horizontalDivider}></hr>
               <Button onClick={() => logout()} className={classes.headerButton}>

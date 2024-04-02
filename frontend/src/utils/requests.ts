@@ -135,3 +135,23 @@ export const fetchStatistics = async (currentUser: string) => {
     console.error('Failed to fetch exercises', error)
   }
 }
+
+export const chatbotRequest = async (message: string) => {
+  try {
+    const response = await axios.post('http://localhost:3000/api/chatbot', {
+      message: message,
+    })
+
+    if (response.status === 200) {
+      return { success: true, response: response.data }
+    } else {
+      return { success: false, error: 'Failed to send chatbot request' }
+    }
+  } catch (err) {
+    console.log(err)
+    return {
+      success: false,
+      error: "Looks like there's an issue on our end. Please try again.",
+    }
+  }
+}

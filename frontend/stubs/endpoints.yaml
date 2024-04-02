@@ -35,6 +35,15 @@
       body: 'User registered successfully!'
 
 - request:
+    url: ^/api/auth/forgot-password$
+    method: POST
+    json: '{ "username": "test@example.com" }'
+  response:
+    - status: 200
+      latency: 1000
+      body: 'Password reset email sent successfully'
+
+- request:
     url: ^/exercises/add$
     method: POST
   response:
@@ -57,3 +66,20 @@
     - status: 200
       latency: 1000
       file: './responses/statistics.json'
+      
+- request:
+    url: ^/api/chatbot$
+    method: POST
+    json: '{ "message": "Hello, chatbot!" }'
+  response:
+    - status: 200
+      latency: 1000
+      body: 'Chatbot response'
+
+- request:
+    url: ^/api/chatbot$
+    method: GET
+  response:
+    - status: 200
+      latency: 1000
+      body: 'Chatbot GET response'
