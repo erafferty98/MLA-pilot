@@ -1,24 +1,21 @@
 'use client'
-
 import { useCookies } from 'react-cookie';
-import { Container, Group, Burger, Drawer } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
-import { IconSquarePlus, IconLogout, IconVideo } from '@tabler/icons-react'
-import { useRouter } from 'next/navigation'
-import classes from './Header.module.css'
-import Image from 'next/image'
-import { Modal, Button } from '@mantine/core'
-import { clearCurrentUser } from '../../utils/sessionStorage'
-import AddExerciseModal, { AddExercieModalTitle } from '../AddExerciseModal'
+import { Container, Group, Burger, Drawer, Text } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { IconSquarePlus, IconLogout, IconVideo } from '@tabler/icons-react';
+import { useRouter } from 'next/navigation';
+import classes from './Header.module.css';
+import Image from 'next/image';
+import { Modal, Button } from '@mantine/core';
+import { clearCurrentUser } from '../../utils/sessionStorage';
+import AddExerciseModal, { AddExercieModalTitle } from '../AddExerciseModal';
 import GymTutorials from '../GymTutorials';
 
 const Header = () => {
-  const router = useRouter()
-  const [openedModal, { open: openModal, close: closeModal }] =
-    useDisclosure(false)
-  const [openedDrawer, { toggle: toggleDrawer, close: closeDrawer }] =
-    useDisclosure(false)
-  const [cookies, setCookie, removeCookie] = useCookies(['authToken'])
+  const router = useRouter();
+  const [openedModal, { open: openModal, close: closeModal }] = useDisclosure(false);
+  const [openedDrawer, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
+  const [cookies, setCookie, removeCookie] = useCookies(['authToken']);
 
   // Function to navigate to the Gym Tutorials page
   const navigateToGymTutorials = () => {
@@ -27,14 +24,15 @@ const Header = () => {
   };
 
   const logout = () => {
-    clearCurrentUser()
-    removeCookie('authToken')
-    router.push('/login')
-  }
+    clearCurrentUser();
+    removeCookie('authToken');
+    router.push('/login');
+  };
+  
   const addEventModal = () => {
-    openModal()
-    closeDrawer()
-  }
+    openModal();
+    closeDrawer();
+  };
 
   return (
     <>
@@ -47,6 +45,7 @@ const Header = () => {
       </Modal>
       <header className={classes.header}>
         <Container size="md" className={classes.inner}>
+          <div className={classes.logoContainer}>
           <a href="/" className={classes.logoLink}>
             <Image
               width={40}
@@ -56,11 +55,16 @@ const Header = () => {
               loading="lazy"
             />
           </a>
+          </div>
           <Group gap={5} visibleFrom="xs">
             <>
               <Button onClick={openModal} className={classes.headerButton}>
                 <IconSquarePlus className={classes.headerButtonIcon} />
                 Add Exercise
+              </Button>
+              <Button onClick={navigateToGymTutorials} className={classes.headerButton}>
+                <IconVideo className={classes.headerButtonIcon} />
+                Gym Tutorials
               </Button>
               <div className={classes.verticalDivider}></div>
               <Button onClick={() => logout()} className={classes.headerButton}>
@@ -98,10 +102,6 @@ const Header = () => {
                 <IconSquarePlus className={classes.headerButtonIcon} />
                 Add Exercise
               </Button>
-              <Button onClick={navigateToGymTutorials} className={classes.headerButton}>
-                <IconVideo className={classes.headerButtonIcon} />
-                Gym Tutorials
-              </Button>
               <hr className={classes.horizontalDivider}></hr>
               <Button onClick={() => logout()} className={classes.headerButton}>
                 <IconLogout className={classes.headerButtonIcon} />
@@ -112,7 +112,7 @@ const Header = () => {
         </Drawer.Content>
       </Drawer.Root>
     </>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

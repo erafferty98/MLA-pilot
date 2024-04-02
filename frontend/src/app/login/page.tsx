@@ -43,6 +43,12 @@ const loginPage = () => {
                 Sign Up Here
               </Anchor>
             </Text>
+            <Text c="dimmed" size="sm" ta="center" pt="20px">
+              Forgot Your Password?{' '}
+              <Anchor size="sm" href="/forgot-password" c="#FD6580">
+                Reset Your Password
+              </Anchor>
+            </Text>
           </Stack>
         </Paper>
       </Flex>
