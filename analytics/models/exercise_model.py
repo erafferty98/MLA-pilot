@@ -34,7 +34,7 @@ def aggregate_user_stats(username):
             "totalDuration": {"$sum": "$duration"},
             "totalSets": {"$sum": "$sets"},
             "totalReps": {"$sum": "$reps"},
-            "averageWeightLifted": {"$avg": "$weight"}
+            "averageWeightLifted": {"$avg": "$weightLifted"}
         }},
         {"$project": {
             "exerciseType": "$_id.exerciseType",
@@ -68,7 +68,7 @@ def aggregate_general_stats():
             "totalDuration": {"$sum": "$duration"},
             "totalSets": {"$sum": "$sets"},
             "totalReps": {"$sum": "$reps"},
-            "averageWeightLifted": {"$avg": "$weight"}
+            "averageWeightLifted": {"$avg": "$weightLifted"}
         }},
         {"$group": {
             "_id": "$_id.username",
@@ -113,7 +113,7 @@ def aggregate_weekly_stats(username, start_date, end_date):
             "totalDuration": {"$sum": "$duration"},
             "totalSets": {"$sum": "$sets"},
             "totalReps": {"$sum": "$reps"},
-            "averageWeightLifted": {"$avg": "$weight"}
+            "averageWeightLifted": {"$avg": "$weightLifted"}
         }},
         {"$project": {
             "exerciseType": "$_id.exerciseType",

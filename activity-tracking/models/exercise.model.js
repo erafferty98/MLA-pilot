@@ -1,22 +1,22 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-// /**
-//  * Represents the exercise schema.
-//  *
-//  * @typedef {Object} ExerciseSchema
-//  * @property {string} username - The username of the user performing the exercise.
-//  * @property {string} exerciseType - The type of exercise. Can be one of: 'Running', 'Cycling', 'Swimming', 'Gym', 'Other'.
-//  * @property {string} [subcategory] - The subcategory of the exercise. Only required for Gym exercises. Can be one of: 'Squat', 'Bench Press', 'Deadlift', 'Overhead Press', 'Bent Over Row', 'Other'.
-//  * @property {string} [description] - The description of the exercise.
-//  * @property {number} duration - The duration of the exercise in minutes.
-//  * @property {Date} date - The date of the exercise.
-//  * @property {number} [sets] - The number of sets performed. Only required for Gym exercises.
-//  * @property {number} [reps] - The number of reps performed. Only required for Gym exercises.
-//  * @property {number} [weightLifted] - The weight lifted during the exercise. Only required for Gym exercises.
-//  * @property {Date} createdAt - The timestamp when the exercise was created.
-//  * @property {Date} updatedAt - The timestamp when the exercise was last updated.
-//  */
+/**
+ * Represents the exercise schema.
+ *
+ * @typedef {Object} ExerciseSchema
+ * @property {string} username - The username of the user performing the exercise.
+ * @property {string} exerciseType - The type of exercise. Can be one of: 'Running', 'Cycling', 'Swimming', 'Gym', 'Other'.
+ * @property {string} [subcategory] - The subcategory of the exercise. Only required for Gym exercises. Can be one of: 'Squat', 'Bench Press', 'Deadlift', 'Overhead Press', 'Bent Over Row', 'Other'.
+ * @property {string} [description] - The description of the exercise.
+ * @property {number} duration - The duration of the exercise in minutes.
+ * @property {Date} date - The date of the exercise.
+ * @property {number} [sets] - The number of sets performed. Only required for Gym exercises.
+ * @property {number} [reps] - The number of reps performed. Only required for Gym exercises.
+ * @property {number} [weightLifted] - The weight lifted during the exercise. Only required for Gym exercises.
+ * @property {Date} createdAt - The timestamp when the exercise was created.
+ * @property {Date} updatedAt - The timestamp when the exercise was last updated.
+ */
 
 const exerciseSchema = new Schema(
   {
@@ -29,8 +29,8 @@ const exerciseSchema = new Schema(
     subcategory: { 
       type: String, 
       required: false, 
-      enum: ['Squat','Bench Press','Deadlift','Overhead Press','Bent Over Row', 'Other Weightlifting'] }, // Optional field for Gym exercises
-    description: { type: String, required: false },
+      enum: ['Squat', 'Bench Press', 'Deadlift', 'Overhead Press', 'Bent Over Row', 'Other Weightlifting']
+    }, // Optional field for Gym exercises
     description: { type: String, required: false },
     duration: { 
         type: Number, 
@@ -66,7 +66,7 @@ const exerciseSchema = new Schema(
       min: [0, 'Weight lifted should be non-negative.']
     },
   },
-  { timestamps: true }
+  { timestamps: true } // This enables automatic creation of createdAt and updatedAt fields
 );
 
 const Exercise = mongoose.model('Exercise', exerciseSchema);

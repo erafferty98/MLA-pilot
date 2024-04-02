@@ -15,7 +15,6 @@ router.get('/', async (req, res) => {
   
 // POST: Add a new exercise
 router.post('/add', async (req, res) => {
-  console.log(req.body)
   try {
     const { username, exerciseType, description, duration, date, subcategory, sets, reps, weightLifted } = req.body;
 
@@ -23,12 +22,12 @@ router.post('/add', async (req, res) => {
       username,
       exerciseType,
       description,
-      duration: Number(duration),
-      date: Date.parse(date),
+      duration: duration ? Number(duration) : undefined,
+      date: date ? Date.parse(date) : undefined,
       subcategory, //optional
-      sets: Number(sets), //optional
-      reps: Number(reps), //optional
-      weightLifted: Number(weightLifted), //optional
+      sets: sets ? Number(sets) : undefined, //optional
+      reps: reps ? Number(reps) : undefined, //optional
+      weightLifted: weightLifted ? Number(weightLifted) : undefined, //optional
     });
 
     await newExercise.save();
@@ -68,36 +67,32 @@ router.delete('/:id', async (req, res) => {
 
 // PUT: Update an exercise by ID
 router.put('/update/:id', async (req, res) => {
-    try {
-      const { username, description, duration, date, subcategory, sets, reps, weightLifted } = req.body;
-  
-      if (!username || !description || !duration || !date) {
-        res.status(400).json({ error: 'All fields are required' });
-        return;
-      }
-  
-      const exercise = await Exercise.findById(req.params.id);
-      if (!exercise) {
-        res.status(404).json({ error: 'Exercise not found' });
-        return;
-      }
-  
-      exercise.username = username;
-      exercise.exerciseType = exerciseType;
-      exercise.description = description;
-      exercise.duration = Number(duration);
-      exercise.date = new Date(date);
-      exercise.subcategory = subcategory //optional
-      exercise.sets = Number(sets), //optional
-      exercise.reps = Number(reps), //optional
-      exercise.weightLifted = Number(weightLifted), //optional
-  
-      await exercise.save();
-      res.json({ message: 'Exercise updated!', exercise });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'An error occurred while updating the exercise' });
+  try {
+    const { username, exerciseType, description, duration, date, subcategory, sets, reps, weightLifted } = req.body;
+
+    const exercise = await Exercise.findById(req.params.id);
+    if (!exercise) {
+      res.status(404).json({ error: 'Exercise not found' });
+      return;
     }
-  });
+
+    // Update fields if provided
+    if (username) exercise.username = username;
+    if (exerciseType) exercise.exerciseType = exerciseType;
+    if (description) exercise.description = description;
+    if (duration) exercise.duration = Number(duration);
+    if (date) exercise.date = new Date(date);
+    if (subcategory !== undefined) exercise.subcategory = subcategory; // Check for undefined to allow clearing the field
+    if (sets !== undefined) exercise.sets = Number(sets); //optional
+    if (reps !== undefined) exercise.reps = Number(reps); //optional
+    if (weightLifted !== undefined) exercise.weightLifted = Number(weightLifted); //optional
+
+    await exercise.save();
+    res.json({ message: 'Exercise updated!', exercise });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while updating the exercise' });
+  }
+});
   
   module.exports = router;
