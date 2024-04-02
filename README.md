@@ -155,7 +155,7 @@ The application is containerized using Docker and can be deployed on any platfor
 
 ## Tyk
 
-By default, the services are run behind TYK (used as an API Gateway & Reverse Proxy). Tyk is configured in the tyk folder, where each api has a config file (eg tyk/apps/auth). Here we configure which requests to tyk we match to this api, where we forward them on to and any middleware that is applied.
+By default, the services are run behind [Tyk](https://tyk.io/) (used as an API Gateway & Reverse Proxy). Tyk is configured in the ./tyk folder, where each api has a config file (eg tyk/apps/auth). Here we configure which requests to tyk we match to this api, where we forward them on to and any middleware that is applied.
 
 To access TYK, the frontend/orchestration needs to use an API Key. This is set as `TYK_API_KEY` in the .env for the frontend, and is set as a header on all requests to tyk. This means that all requests to our services are fully secured through auth, as requests can only get to the service via tyk, and the only way to get the api key is to send a request to the frontend/orchestration with a valid auth token.
 
