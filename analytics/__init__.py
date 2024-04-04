@@ -1,3 +1,3 @@
-from .old_app import app
+# analytics/__init__.py
 
-__all__ = ['app']
+# This can be empty or used for package-wide configurations later.

@@ -1,4 +1,4 @@
-# utils/calculations.py
+# analytics/utils/calculations.py
 import math
 
 rep_to_percentage = {

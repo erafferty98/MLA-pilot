@@ -1,5 +1,4 @@
-# utils/db.py
-
+# analytics/db.py
 from flask import current_app, g
 import os
 from pymongo import MongoClient

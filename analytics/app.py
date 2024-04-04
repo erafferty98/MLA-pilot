@@ -1,43 +1,42 @@
+# analytics/app.py
 from flask import Flask
-from flask_cors import CORS
 from flask_graphql import GraphQLView
+from flask_cors import CORS
+from .schema.schema import schema
+from .models.models import mongo
+from .routes.routes import configure_routes
+from .utils.db import initialize_db
 from dotenv import load_dotenv
-import graphene
-from .models import mongo, ExerciseType
-from .routes import stats_bp, user_preferences_bp
+import os
 
-# Load environment variables
-load_dotenv()
+def create_app():
+    load_dotenv()  # Load environment variables from .env file.
 
-# Initialize Flask app
-app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}, methods="GET,HEAD,POST,OPTIONS,PUT,PATCH,DELETE")
+    app = Flask(__name__)
+    CORS(app, resources={r"/*": {"origins": "*"}})  # Enable CORS for all domains on all routes.
+    
+    # MongoDB Configuration
+    app.config["MONGO_URI"] = os.getenv('MONGO_URI')
+    mongo.init_app(app)
 
-# Initialize PyMongo
-app.config["MONGO_URI"] = os.getenv('MONGO_URI')
-mongo.init_app(app)
+    # Initialize Database
+    initialize_db(app)
 
-# Define GraphQL queries
-class Query(graphene.ObjectType):
-    exercises = graphene.List(ExerciseType)
+    # GraphQL Endpoint
+    app.add_url_rule(
+        '/graphql', 
+        view_func=GraphQLView.as_view(
+            'graphql', 
+            schema=schema, 
+            graphiql=True  # Enables the GraphiQL interface for easy testing.
+        )
+    )
 
-    def resolve_exercises(self, info):
-        exercises = mongo.db.exercises.find()
-        return [ExerciseType(
-            username=exercise['username'],
-            exerciseType=exercise['exerciseType'],
-            duration=exercise['duration']
-        ) for exercise in exercises]
+    # Configure other routes
+    configure_routes(app)
 
-# Create GraphQL schema
-schema = graphene.Schema(query=Query)
-
-# GraphQL endpoint
-app.add_url_rule('/graphql', view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True))
-
-# Register blueprints
-app.register_blueprint(stats_bp)
-app.register_blueprint(user_preferences_bp)
+    return app
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=5050)
+    app = create_app()
+    app.run(debug=True, host='0.0.0.0', port=os.getenv('PORT', 5000))
