@@ -30,6 +30,9 @@ connection.on('error', (error) => {
 const exercisesRouter = require('./routes/exercises');
 app.use('/exercises', exercisesRouter);
 
+const userpreferencesRouter = require('./routes/chatbot');
+app.use('/chatbot', userpreferencesRouter);
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
