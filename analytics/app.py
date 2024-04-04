@@ -1,10 +1,9 @@
-# analytics/app.py
 from flask import Flask
 from flask_graphql import GraphQLView
 from flask_cors import CORS
 from .schema.schema import schema
 from .models.models import mongo
-from .routes.routes import configure_routes
+from .routes.routes import combined_routes_bp
 from .utils.db import initialize_db
 from dotenv import load_dotenv
 import os
@@ -32,8 +31,8 @@ def create_app():
         )
     )
 
-    # Configure other routes
-    configure_routes(app)
+    # Register combined_routes_bp blueprint
+    app.register_blueprint(combined_routes_bp)
 
     return app
 
