@@ -7,7 +7,7 @@ services:
     ports:
       - '3000:3000'
     networks:
-      - app-network
+      - tyk
 
   activity-tracking:
     build:
@@ -20,7 +20,7 @@ services:
     depends_on:
       - mongodb
     networks:
-      - app-network
+      - tyk
 
   analytics:
     build:
@@ -34,7 +34,7 @@ services:
     depends_on:
       - mongodb
     networks:
-      - app-network
+      - tyk
 
   authservice:
     build:
@@ -44,11 +44,11 @@ services:
       - SPRING_DATA_MONGODB_DATABASE=test
       - SPRING_DATA_MONGODB_URI=mongodb://root:cfgmla23@mongodb:27017
     expose:
-      - '8080'
+      - '8090'
     depends_on:
       - mongodb
     networks:
-      - app-network
+      - tyk
 
   mongodb:
     image: mongo:latest
@@ -60,11 +60,60 @@ services:
     volumes:
       - mongodbdata:/data/db
     networks:
-      - app-network
+      - tyk
+
+  tyk-gateway:
+    image: docker.tyk.io/tyk-gateway/tyk-gateway:v5.1.0
+    ports:
+      - 8080:8080
+    networks:
+      - tyk
+    volumes:
+      - ./tyk/tyk.conf:/opt/tyk-gateway/tyk.conf
+      - ./tyk/apps:/opt/tyk-gateway/apps
+      - ./tyk/middleware:/opt/tyk-gateway/middleware
+    environment:
+      - TYK_GW_SECRET=foo
+    depends_on:
+      - tyk-redis
+    platform: linux/amd64
+
+  tyk-redis:
+    image: redis:6.2.7-alpine
+    networks:
+      - tyk
+    ports:
+      - 6379:6379
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus:/etc/prometheus
+    ports:
+      - '9090:9090'
+    networks:
+      - tyk
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - '3100:3000'
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=cfgmla23
+      - GF_USERS_ALLOW_SIGN_UP=false
+    depends_on:
+      - prometheus
+    networks:
+      - tyk
 
 networks:
   app-network:
     driver: bridge
 
+  tyk:
+
 volumes:
   mongodbdata:
+  grafana_data:

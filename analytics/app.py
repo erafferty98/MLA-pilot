@@ -7,11 +7,19 @@ from .routes.routes import combined_routes_bp
 from .utils.db import initialize_db
 from dotenv import load_dotenv
 import os
+from urllib.parse import quote_plus
+from bson import json_util
+from prometheus_flask_exporter import PrometheusMetrics
+import traceback
+import logging
+import os
+from datetime import datetime, timedelta
 
 def create_app():
     load_dotenv()  # Load environment variables from .env file.
 
     app = Flask(__name__)
+    metrics = PrometheusMetrics(app)
     CORS(app, resources={r"/*": {"origins": "*"}})  # Enable CORS for all domains on all routes.
     
     # MongoDB Configuration
@@ -20,6 +28,8 @@ def create_app():
 
     # Initialize Database
     initialize_db(app)
+    
+    metrics.info('app_info', 'Application info', version='1.0.3')
 
     # GraphQL Endpoint
     app.add_url_rule(
