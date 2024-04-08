@@ -22,8 +22,12 @@ dependencies {
 	implementation("org.passay:passay:1.6.0") // Add Passay dependency
 	implementation ("org.springframework.boot:spring-boot-starter-oauth2-client") // Add Spring OAuth2 dependency
 	implementation("javax.validation:validation-api:2.0.1.Final") // Add javax.validation dependency
-	implementation ("org.hibernate.validator:hibernate-validator")
-	implementation ("com.sun.mail:javax.mail:1.6.2")
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.security:spring-security-test")
+		    // Micrometer Prometheus registry for exposing metrics
+    implementation("io.micrometer:micrometer-registry-prometheus")
+    // Spring Boot Actuator for metrics endpoint
+    implementation ("org.springframework.boot:spring-boot-starter-actuator")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("org.mockito:mockito-core:3.+")
