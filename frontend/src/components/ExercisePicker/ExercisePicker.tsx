@@ -1,59 +1,67 @@
 import { useState } from 'react'
-import { UnstyledButton, Menu, Group, Text, Flex, Box } from '@mantine/core'
-import { IconChevronDown } from '@tabler/icons-react'
-import { exercises } from '../../utils/exercises'
-import classes from './ExercisePicker.module.css'
+import { UnstyledButton, Menu, Group, Text, Flex } from '@mantine/core';
+import { IconChevronDown } from '@tabler/icons-react';
+import { exercises } from '../../utils/exercises';
+import React from 'react'; // Add this line to import React
 
-const ExercisePicker = ({ setValue, name }) => {
-  const [opened, setOpened] = useState(false)
-  const [selected, setSelected] = useState(exercises[0])
+import classes from './ExercisePicker.module.css';
 
-  const setSelectedWider = (value) => {
-    setSelected(value)
-    setValue(name, value.label)
-  }
+const ExercisePicker = ({ setValue, name }: any) => { // Add type annotation to the 'item' parameter
 
-  const items = exercises.map((item) => (
-    <Menu.Item
-      leftSection={<item.icon />}
-      onClick={() => setSelectedWider(item)}
-      key={item.label}
-    >
-      {item.label}
-    </Menu.Item>
-  ))
+  const [opened, setOpened] = useState(false);
+  const [selected, setSelected] = useState(exercises[0]);
 
-  return (
-    <>
-      <Flex justify="flex-start" w={'100%'} pt={'1rem'}>
-        <Text className={classes.label}>Select Exercise</Text>
-      </Flex>
-      <Menu
-        onOpen={() => setOpened(true)}
-        onClose={() => setOpened(false)}
-        radius="md"
-        width="target"
-        withinPortal
+  const handleSelect = (item: any) => { // Add type annotation to the 'item' parameter
+    setSelected(item.label || item);
+    setValue(name, item.label || item);
+    setOpened(false);
+  };
+
+  const renderItems = () => {
+    const items = exercises; // Replace 'exerciseTypes' with 'exercises'
+    return items.map((item: any) => ( // Add type annotation to the 'item' parameter
+      <Menu.Item
+        onClick={() => handleSelect(item)}
+        key={item.label || item}
       >
-        <Menu.Target>
-          <UnstyledButton
-            className={classes.control}
-            data-expanded={opened || undefined}
-          >
-            <Group gap="xs">
-              <selected.icon />
-              <span className={classes.label}>{selected.label}</span>
-            </Group>
-            <IconChevronDown
-              size="1rem"
-              className={classes.icon}
-              stroke={1.5}
-            />
-          </UnstyledButton>
-        </Menu.Target>
-        <Menu.Dropdown>{items}</Menu.Dropdown>
-      </Menu>
-    </>
-  )
-}
-export default ExercisePicker
+        <Group gap="xs">
+          {item.icon && React.createElement(item.icon)}
+        </Group>
+      </Menu.Item>
+    ));
+  };
+
+return (
+  <>
+    <Flex justify="flex-start" w={'100%'} pt={'1rem'}>
+      <Text className={classes.label}>Select Exercise</Text>
+    </Flex>
+    <Menu
+      onOpen={() => setOpened(true)}
+      onClose={() => setOpened(false)}
+      radius="md"
+      width="target"
+      withinPortal
+    >
+      <Menu.Target>
+        <UnstyledButton
+          className={classes.control}
+          data-expanded={opened || undefined}
+        >
+          <Group gap="xs">
+            {selected.icon && React.createElement(selected.icon)}
+            <span className={classes.label}>{selected.label}</span>
+          </Group>
+          <IconChevronDown
+            size="1rem"
+            className={classes.icon}
+            stroke={1.5}
+          />
+        </UnstyledButton>
+      </Menu.Target>
+      <Menu.Dropdown>{renderItems()}</Menu.Dropdown>
+    </Menu>
+  </>
+);
+};
+export default ExercisePicker;
